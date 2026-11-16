@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>7tono — Instrumentos y equipos de sonido</title>
+<meta name="description" content="Tienda de instrumentos y equipos de sonido, y alquiler de sonido para eventos de todas las escalas.">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f1f8;--surface:#fff;--ink:#16101f;--muted:#5f566b;--line:#d9d2e3;--brand:#6d28d9;--on-brand:#fff;--amber:#7c3aed;--glow:#a78bfa;--dark:#0d0914;--on-dark:#f5f0ff;--ok:#1f7a4d;--bad:#b3261e;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b0812;--surface:#17111f;--ink:#ece8f4;--muted:#a79db8;--line:#2e2540;--brand:#a78bfa;--on-brand:#140b24;--amber:#c4b5fd;--glow:#a78bfa;--dark:#000;--on-dark:#f5f0ff;--ok:#5fd19a;--bad:#ff8a80;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0b0812;--surface:#17111f;--ink:#ece8f4;--muted:#a79db8;--line:#2e2540;--brand:#a78bfa;--on-brand:#140b24;--amber:#c4b5fd;--glow:#a78bfa;--dark:#000;--on-dark:#f5f0ff;--ok:#5fd19a;--bad:#ff8a80;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 Figtree,system-ui,sans-serif}
+h1,h2,h3{font-family:'Bricolage Grotesque',Figtree,sans-serif;line-height:1.1;margin:0}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--dark);color:var(--on-dark);border-bottom:2px solid var(--glow);display:flex;align-items:center;gap:8px;padding:10px 16px;flex-wrap:wrap}
+.logo{font:800 24px 'Bricolage Grotesque',sans-serif;margin-right:auto}.logo span{color:var(--glow)}
+nav{display:flex;gap:4px;flex-wrap:wrap}
+nav button{background:transparent;border:0;color:inherit;padding:8px 12px;border-radius:8px;font-weight:500}
+nav button:hover,nav button.on{background:rgba(255,255,255,.16)}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 16px 60px}
+.hero{background:var(--dark);color:var(--on-dark);border:1px solid var(--brand);border-radius:16px;padding:32px 24px;display:grid;grid-template-columns:1.2fr 1fr;gap:24px;align-items:end;overflow:hidden}
+.hero h1{font-size:clamp(32px,6vw,56px);font-weight:800}
+.hero p{max-width:44ch;opacity:.9}
+.eq{display:flex;gap:4px;align-items:flex-end;height:140px}
+.eq i{flex:1;background:var(--glow);border-radius:3px 3px 0 0;height:30%;animation:eq 1.2s ease-in-out infinite alternate}
+@keyframes eq{to{height:95%}}
+@media (prefers-reduced-motion:reduce){.eq i{animation:none}}
+@media (max-width:700px){.hero{grid-template-columns:1fr}.eq{height:70px}}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}
+.bar input,.bar select,.f input,.f select{padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);width:100%}
+.bar input{flex:1;min-width:180px;width:auto}
+.chip{border:1px solid var(--line);background:var(--surface);padding:8px 14px;border-radius:99px}
+.chip.on{background:var(--brand);color:var(--on-brand);border-color:var(--brand)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.tile{height:130px;display:grid;place-items:center;font-size:52px;background:radial-gradient(circle,var(--line) 1.5px,transparent 2px) 0 0/12px 12px,var(--bg)}
+.card .b{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card small{color:var(--muted)}
+.price{font:700 20px 'Bricolage Grotesque',sans-serif}
+.btn{background:var(--brand);color:var(--on-brand);border:0;border-radius:8px;padding:10px 16px;font-weight:600}
+.btn.alt{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.sm{padding:6px 10px;font-size:14px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:16px}
+.f{display:grid;gap:10px;max-width:420px}
+.f label{display:grid;gap:4px;font-weight:500;font-size:14px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:520px}
+th,td{text-align:left;padding:8px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:middle}
+td input,td select{padding:6px;border:1px solid var(--line);border-radius:6px;background:var(--surface);width:100px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.stat b{display:block;font:800 26px 'Bricolage Grotesque',sans-serif}
+.tag{display:inline-block;padding:2px 8px;border-radius:99px;background:var(--bg);font-size:13px}
+.ok{color:var(--ok)}.bad{color:var(--bad)}
+#modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:5vh 12px;z-index:20}
+#modal.on{display:flex}
+#modal>div{background:var(--surface);border-radius:14px;padding:20px;width:min(520px,100%)}
+.pay{display:grid;gap:8px}
+.pay label{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:10px;font-weight:500}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:10px;z-index:30}
+footer{max-width:1100px;margin:0 auto;padding:20px 16px 40px;color:var(--muted);font-size:14px;display:flex;gap:16px;flex-wrap:wrap;border-top:1px solid var(--line)}footer button{background:none;border:0;padding:0;text-decoration:underline;color:inherit}details.panel summary{cursor:pointer;font-weight:600}details.panel p{margin:10px 0 0}.f input[type=checkbox]{width:auto}
+a.btn{display:inline-block;text-decoration:none;text-align:center}.btn.wa{background:#25D366;color:#0b3d1e}.wafab{position:fixed;right:16px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:6;border-radius:99px;box-shadow:0 4px 14px rgba(0,0,0,.3)}
+.rent{display:grid;grid-template-columns:1fr 340px;gap:16px;align-items:start}.quote{position:sticky;top:calc(80px + env(safe-area-inset-top,0px))}@media (max-width:820px){.rent{grid-template-columns:1fr}.quote{position:static}}.panel>h3{margin-bottom:8px}.kv{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px solid var(--line)}.in{padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}.calh{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.calg{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}.cd{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 0;min-height:40px}.cd:disabled{opacity:.45;cursor:not-allowed}.cd.rg{background:color-mix(in srgb,var(--brand) 18%,var(--surface))}.cd.sel{background:var(--brand);color:var(--on-brand);border-color:var(--brand)}.cd.tk{background:color-mix(in srgb,var(--bad) 18%,var(--surface));color:var(--bad);text-decoration:line-through;opacity:1}
+.capbox{display:inline-block;border:1px solid var(--line);border-radius:8px;padding:6px 12px;background:#e9edef;color:#12232b;font-size:22px;letter-spacing:3px;margin-bottom:6px}canvas.capbox{padding:0;display:block}
+.hb{display:grid;grid-template-columns:90px 1fr 120px;gap:8px;align-items:center;margin:6px 0;font-size:14px}.hbt{background:var(--bg);border-radius:6px;height:14px}.hbt i{display:block;height:100%;background:var(--brand);border-radius:6px}.hb b{text-align:right}
+.x{float:right;border:0;background:var(--bg);width:34px;height:34px;border-radius:50%;font-size:16px}.tile{overflow:hidden}.tile img{width:100%;height:100%;object-fit:cover}.tilebtn{border:0;padding:0;background:none;display:block;width:100%}.tags{display:flex;gap:6px;flex-wrap:wrap}button.tag{border:0;cursor:pointer;color:inherit}.pay input{width:auto}.f textarea{padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);width:100%;resize:vertical}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo"><span>7</span>tono</div>
+  <nav id="nav"></nav>
+</header>
+<main class="wrap" id="view"></main>
+<footer><span>© 2026 7tono</span><button onclick="go('about')">Quiénes somos</button><button onclick="go('terms')">Términos y condiciones</button><button onclick="go('quejas')">Quejas y reclamos</button><button onclick="go('faq')">Preguntas frecuentes</button><button onclick="go('privacy')">Política de privacidad</button><button onclick="go('contacto')">Contacto</button></footer>
+<div id="modal" role="dialog" aria-modal="true"><div id="mbody"></div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const fmt=n=>new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(n);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const CATS=['Guitarras','Teclados','Audio','Micrófonos','Parlantes'];
+const ICON={Guitarras:'🎸',Teclados:'🎹',Audio:'🎧',Micrófonos:'🎤',Parlantes:'🔊'};
+const PAYS={card:'Tarjeta de crédito o débito',pse:'PSE (transferencia bancaria)',nequi:'Nequi o Daviplata',cod:'Pago contra entrega',gw:'Pasarela de pagos (enlace seguro)'};
+const STATES=['Pendiente','Pagado','Enviado','Entregado','Cancelado'];
+const seed=()=>({nextId:20,
+ products:[
+  {id:1,name:'Guitarra acústica Dreadnought',cat:'Guitarras',price:890000,stock:8},
+  {id:2,name:'Guitarra eléctrica estilo Strat',cat:'Guitarras',price:1450000,stock:5},
+  {id:3,name:'Teclado de 61 teclas sensitivo',cat:'Teclados',price:1190000,stock:6},
+  {id:4,name:'Piano digital de 88 teclas',cat:'Teclados',price:3200000,stock:3},
+  {id:5,name:'Interfaz de audio USB 2 canales',cat:'Audio',price:620000,stock:12},
+  {id:6,name:'Audífonos de estudio cerrados',cat:'Audio',price:380000,stock:15},
+  {id:7,name:'Micrófono de condensador XLR',cat:'Micrófonos',price:540000,stock:9},
+  {id:8,name:'Micrófono dinámico vocal',cat:'Micrófonos',price:260000,stock:20},
+  {id:9,name:'Monitor de estudio activo 5"',cat:'Parlantes',price:780000,stock:7},
+  {id:10,name:'Parlante PA activo 15"',cat:'Parlantes',price:2100000,stock:4}],
+ users:[{id:1,name:'Administrador',email:'admin@7tono.com',pass:'admin123',role:'admin'}],
+ orders:[]});
+let db=null;
+try{db=JSON.parse(localStorage.getItem('resonancia-db'))}catch(e){}
+if(!db||!db.products)db=seed();
+const DEF={1:['Cuerpo dreadnought con tapa de abeto, ideal para acompañar la voz.','acústica,principiante,cuerdas'],2:['Tres micrófonos single coil y puente tremolo para rock y blues.','eléctrica,rock,cuerdas'],3:['61 teclas sensitivas con ritmos y sonidos integrados para aprender y componer.','teclas,principiante,estudio'],4:['88 teclas con acción de martillo y sonido de piano de cola.','piano,teclas,profesional'],5:['Dos entradas combo con preamplificadores y alimentación fantasma por USB.','grabación,estudio,usb'],6:['Respuesta plana para mezcla y monitoreo, con almohadillas cómodas.','estudio,monitoreo,cerrados'],7:['Cápsula grande para voces e instrumentos acústicos en estudio.','estudio,voz,xlr'],8:['Patrón cardioide que rechaza el ruido de sala, resistente para escenario.','voz,en vivo,xlr'],9:['Monitor activo biamplificado con respuesta precisa para producción musical.','estudio,monitoreo,activo'],10:['Potencia para eventos y bandas, con entradas XLR y de línea.','en vivo,activo,eventos']};
+db.complaints=db.complaints||[];if(!db.rental)db.rental=seedRental();if(!db.rental.cities){db.rental.cities=[{id:1,name:'Recoger en bodega',fee:0},{id:2,name:'Bogotá',fee:150000},{id:3,name:'Municipios cercanos',fee:280000},{id:4,name:'Otra ciudad (se cotiza aparte)',fee:0,ask:true}];db.rental.depositPct=30}backfillRes();if(db.rental.guaPct==null)db.rental.guaPct=20;db.users.forEach(u=>{if(u.email=='admin@resonancia.co')u.email='admin@7tono.com'});if(!db.shop)db.shop={iva:19,ship:15000,freeFrom:500000,coupons:[{code:'BIENVENIDA10',pct:10,active:true}]};
+db.products.forEach(p=>{const d=DEF[p.id];if(p.desc===undefined)p.desc=d?d[0]:'';if(!p.tags)p.tags=d?d[1].split(','):[];if(p.img===undefined)p.img=''});
+const save=()=>{try{localStorage.setItem('resonancia-db',JSON.stringify(db));return true}catch(e){return false}};
+let S={view:'shop',cat:'Todos',q:'',cart:[],user:null,tab:'resumen'};
+
+function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.append(d);setTimeout(()=>d.remove(),2400)}
+function openModal(h){$('#mbody').innerHTML='<button class="x" onclick="closeModal()" aria-label="Cerrar">✕</button>'+h;$('#modal').classList.add('on')}
+function closeModal(){$('#modal').classList.remove('on')}
+$('#modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+function go(v){S.view=v;render()}
+
+function nav(){
+ const n=S.cart.reduce((a,i)=>a+i.q,0);
+ $('#nav').innerHTML=`<button class="${S.view=='shop'?'on':''}" onclick="go('shop')">Tienda</button>
+ <button class="${S.view=='alquiler'?'on':''}" onclick="go('alquiler')">Alquiler</button>
+ <button class="${S.view=='about'?'on':''}" onclick="go('about')">Nosotros</button>
+ <button class="${S.view=='faq'?'on':''}" onclick="go('faq')">Preguntas</button>
+ <button class="${S.view=='contacto'?'on':''}" onclick="go('contacto')">Contacto</button>
+ <button class="${S.view=='account'?'on':''}" onclick="go('account')">${S.user?esc(S.user.name.split(' ')[0]):'Ingresar'}</button>
+ ${S.user?'<button onclick="logout()">Cerrar sesión</button>':''}
+ ${S.user&&S.user.role=='admin'?`<button class="${S.view=='admin'?'on':''}" onclick="go('admin')">Administración${pendRes()?' ('+pendRes()+')':''}</button>`:''}
+ <button onclick="cartModal()">Carrito (${n})</button>`;
+}
+function render(){nav();$('#view').innerHTML=({shop,account,admin,about,terms,quejas,faq,privacy,contacto,alquiler}[S.view])();window.scrollTo(0,0)}
+
+/* ---------- Tienda ---------- */
+function shop(){
+ const list=plist();
+ return `<section class="hero"><div><h1>El sonido que buscas, listo para tocar.</h1>
+ <p>Guitarras, teclados, micrófonos y equipos de estudio con envío a todo el país y pago seguro.</p></div>
+ <div class="eq" aria-hidden="true">${Array.from({length:18},(_,i)=>`<i style="animation-delay:-${(i*0.37%1.2).toFixed(2)}s;animation-duration:${(0.8+(i*0.13)%0.9).toFixed(2)}s"></i>`).join('')}</div></section>
+ <div class="bar"><input id="q" type="search" placeholder="Buscar un instrumento o equipo" value="${esc(S.q)}" oninput="S.q=this.value;list()" aria-label="Buscar"><select onchange="S.sort=this.value;list()" aria-label="Ordenar" style="width:auto"><option value="">Ordenar</option><option value="asc" ${S.sort=='asc'?'selected':''}>Precio: menor a mayor</option><option value="desc" ${S.sort=='desc'?'selected':''}>Precio: mayor a menor</option></select>
+ ${['Todos',...CATS].map(c=>`<button class="chip ${S.cat==c?'on':''}" onclick="S.cat='${c}';render()">${c}</button>`).join('')}</div>
+ <div class="grid" id="grid">${cards(list)}</div>`;
+}
+function cards(l){return l.length?l.map(p=>`<article class="card"><button class="tilebtn" onclick="detail(${p.id})" aria-label="Ver detalle de ${esc(p.name)}"><div class="tile">${p.img?`<img src="${p.img}" alt="" loading="lazy">`:ICON[p.cat]}</div></button>
+ <div class="b"><small>${p.cat}</small><h3 style="font-size:18px">${esc(p.name)}</h3>${tagsHtml(p)}<div class="price">${fmt(p.price)}</div>
+ <small class="${p.stock<5?'bad':''}">${p.stock?p.stock+' disponibles':'Agotado'}</small>
+ <div class="row" style="margin-top:auto"><button class="btn" ${p.stock?'':'disabled'} onclick="add(${p.id})">Agregar</button><button class="btn alt" onclick="detail(${p.id})">Detalles</button></div></div></article>`).join(''):'<p>No encontramos productos con ese filtro. Prueba con otra categoría.</p>'}
+function list(){$('#grid').innerHTML=cards(plist())}
+function add(id){const p=db.products.find(x=>x.id==id);const it=S.cart.find(i=>i.id==id);
+ if(it&&it.q>=p.stock)return toast('No hay más unidades disponibles');
+ it?it.q++:S.cart.push({id,q:1});nav();toast('Agregado al carrito')}
+
+/* ---------- Carrito y pago ---------- */
+const total=()=>S.cart.reduce((a,i)=>a+i.q*db.products.find(p=>p.id==i.id).price,0);
+function cartModal(){
+ if(!S.cart.length)return openModal(`<h2>Tu carrito</h2><p>Está vacío. Agrega un producto desde la tienda.</p><button class="btn" onclick="closeModal();go('shop')">Ver productos</button>`);
+ openModal(`<h2>Tu carrito</h2><div class="tbl"><table style="min-width:0">${S.cart.map(i=>{const p=db.products.find(x=>x.id==i.id);
+ return `<tr><td>${esc(p.name)}</td><td><button class="btn alt sm" onclick="qty(${i.id},-1)" aria-label="Quitar uno">−</button> ${i.q} <button class="btn alt sm" onclick="qty(${i.id},1)" aria-label="Agregar uno">+</button></td><td>${fmt(p.price*i.q)}</td></tr>`}).join('')}</table></div>
+ ${summary(0)}<div class="row"><button class="btn" onclick="checkout()">Continuar al pago</button><button class="btn alt" onclick="closeModal()">Cerrar carrito</button><button class="btn alt" onclick="S.cart=[];nav();closeModal()">Vaciar carrito</button></div>`);
+}
+function qty(id,d){const i=S.cart.find(x=>x.id==id),p=db.products.find(x=>x.id==id);i.q+=d;
+ if(i.q>p.stock)i.q=p.stock;if(i.q<=0)S.cart=S.cart.filter(x=>x.id!=id);nav();cartModal()}
+function checkout(){
+ if(!S.user){closeModal();toast('Ingresa o crea tu cuenta para pagar');return go('account')}
+ openModal(`<h2>Finalizar compra</h2><div class="f">
+ <label>Dirección de envío<input id="addr" placeholder="Calle, número, ciudad" required></label>
+ <div class="pay">${Object.entries(PAYS).filter(([k])=>k!='gw'||gwOn()).map(([k,v],i)=>`<label><input type="radio" name="pm" value="${k}" ${i?'':'checked'} onchange="payFields()"> ${v}</label>`).join('')}</div>
+ <div id="pf"></div>${summary(1)}
+ <small>Pasarela simulada: no se procesa ningún cobro real ni se guardan datos de tarjeta.</small>
+ <button class="btn" onclick="pay()">Pagar ${fmt(calc().total)}</button></div>`);payFields();
+}
+function payFields(){const m=document.querySelector('input[name=pm]:checked').value;
+ $('#pf').innerHTML={card:`<div class="f"><label>Número de tarjeta<input id="cn" inputmode="numeric" maxlength="19" placeholder="0000 0000 0000 0000"></label>
+ <div class="row"><label>Vence<input id="cv" placeholder="MM/AA" maxlength="5"></label><label>CVV<input id="cc" inputmode="numeric" maxlength="4"></label></div></div>`,
+ pse:`<label class="f">Banco<select id="bk"><option>Bancolombia</option><option>Davivienda</option><option>Banco de Bogotá</option><option>BBVA</option><option>Nequi</option></select></label>`,
+ nequi:`<label class="f">Número de celular<input id="ph" inputmode="numeric" maxlength="10" placeholder="3001234567"></label>`,
+ cod:`<p>Pagas en efectivo cuando recibas el pedido.</p>`,gw:`<p>Te llevaremos a la página segura de la pasarela para completar el pago. Tu pedido queda pendiente hasta que verifiquemos el pago.</p>`}[m]}
+function pay(){
+ const m=document.querySelector('input[name=pm]:checked').value,addr=$('#addr').value.trim();
+ if(!addr)return toast('Escribe la dirección de envío');
+ let ref='';
+ if(m=='card'){const n=$('#cn').value.replace(/\s/g,'');if(!/^\d{13,19}$/.test(n)||!/^\d\d\/\d\d$/.test($('#cv').value)||!/^\d{3,4}$/.test($('#cc').value))return toast('Revisa los datos de la tarjeta');ref='•••• '+n.slice(-4)}
+ if(m=='pse')ref=$('#bk').value;
+ if(m=='nequi'){const t=$('#ph').value;if(!/^3\d{9}$/.test(t))return toast('Escribe un celular válido de 10 dígitos');ref='***'+t.slice(-4)}
+ const c=calc();const items=S.cart.map(i=>{const p=db.products.find(x=>x.id==i.id);p.stock-=i.q;return{id:p.id,name:p.name,q:i.q,price:p.price}});
+ const o={id:db.nextId++,userId:S.user.id,date:new Date().toISOString().slice(0,10),items,sub:c.sub,disc:c.disc,ship:c.ship,iva:c.iva,coupon:c.code,total:c.total,addr,method:m,ref,status:(m=='cod'||m=='gw')?'Pendiente':'Pagado'};
+ db.orders.push(o);save();S.cart=[];
+ openModal(`<h2>¡Pedido confirmado!</h2><p>Pedido #${o.id} por ${fmt(o.total)}. ${m=='cod'?'Pagarás al recibirlo.':m=='gw'?'Completa el pago en la pasarela y usa "Pedido #'+o.id+'" como referencia. Lo marcaremos como pagado cuando lo verifiquemos.':'Pago recibido.'}</p>${m=='gw'?payA('Pedido #'+o.id):''}<div class="row"><button class="btn" onclick="closeModal();go('account')">Ver mis pedidos</button><button class="btn alt" onclick="invoice(${o.id})">Descargar factura</button></div>`);nav();
+}
+
+/* ---------- Cuenta ---------- */
+function account(){
+ if(!S.user)return `<div class="row" style="align-items:flex-start">
+ <div class="panel" style="flex:1;min-width:260px"><h2>Ingresar</h2><div class="f" style="margin-top:12px">
+ <label>Correo<input id="le" type="email"></label><label>Contraseña<input id="lp" type="password"></label><div id="lcw"></div>
+ <button class="btn" onclick="login()">Ingresar</button><small>Demo administrador: admin@7tono.com / admin123</small></div></div>
+ <div class="panel" style="flex:1;min-width:260px"><h2>Crear cuenta</h2><div class="f" style="margin-top:12px">
+ <label>Nombre completo<input id="rn"></label><label>Correo<input id="re" type="email"></label>
+ <label>Contraseña (mínimo 6 caracteres)<input id="rp" type="password"></label>
+ <div><div id="capw">${capInner(true)}</div><div class="row"><button class="btn alt sm" onclick="capRefresh()">Cambiar código</button><button class="btn alt sm" onclick="capMode()">Usar otro tipo de verificación</button></div></div>
+ <label>Escribe el código o el resultado<input id="rc" autocomplete="off"></label><button class="btn" onclick="register()">Crear cuenta</button></div></div></div>`;
+ const mine=db.orders.filter(o=>o.userId==S.user.id).reverse();
+ return `<div class="panel"><h2>Hola, ${esc(S.user.name)}</h2><p>${esc(S.user.email)} · ${S.user.role=='admin'?'Administrador':'Cliente'}</p>
+ <button class="btn alt" onclick="S.user=null;go('shop')">Cerrar sesión</button></div>
+ <div class="panel"><h2 style="margin-bottom:10px">Mis pedidos</h2>${mine.length?`<div class="tbl"><table><tr><th>#</th><th>Fecha</th><th>Productos</th><th>Pago</th><th>Total</th><th>Estado</th><th>Factura</th></tr>
+ ${mine.map(o=>`<tr><td>${o.id}</td><td>${o.date}</td><td>${o.items.map(i=>esc(i.name)+' ×'+i.q).join(', ')}</td><td>${PAYS[o.method].split(' (')[0]}</td><td>${fmt(o.total)}</td><td><span class="tag">${o.status}</span></td><td><button class="btn alt sm" onclick="invoice(${o.id})">Descargar PDF</button></td></tr>`).join('')}</table></div>`:'<p>Aún no tienes pedidos. Tu primera compra aparecerá aquí.</p>'}</div>`;
+}
+function login(){const now=Date.now();if(LG.until>now)return toast('Demasiados intentos fallidos. Espera '+Math.ceil((LG.until-now)/1000)+' segundos.');
+ if(LG.fails>=3){if(!$('#lc')){lgChallenge();return toast('Resuelve la verificación e inténtalo de nuevo')}if(+$('#lc').value!==LG.a+LG.b){lgChallenge();return toast('La verificación no coincide')}}
+ const u=db.users.find(x=>x.email==$('#le').value.trim().toLowerCase()&&x.pass==$('#lp').value);
+ if(!u){LG.fails++;if(LG.fails>=5){LG.until=Date.now()+30000;LG.fails=0;return toast('Demasiados intentos. Espera 30 segundos para volver a intentar.')}if(LG.fails>=3)lgChallenge();return toast('Correo o contraseña incorrectos')}LG.fails=0;S.user=u;toast('Sesión iniciada');go(u.role=='admin'?'admin':'shop')}
+function register(){if(($('#rc').value||'').trim().toUpperCase()!==CAP.ans.toUpperCase()){capRefresh();return toast('La verificación no coincide. Prueba con el nuevo código.')}const n=$('#rn').value.trim(),e=$('#re').value.trim().toLowerCase(),p=$('#rp').value;
+ if(!n||!/^\S+@\S+\.\S+$/.test(e))return toast('Escribe tu nombre y un correo válido');
+ if(p.length<6)return toast('La contraseña necesita al menos 6 caracteres');
+ if(db.users.some(u=>u.email==e))return toast('Ese correo ya tiene una cuenta');
+ const u={id:db.nextId++,name:n,email:e,pass:p,role:'cliente'};db.users.push(u);save();S.user=u;toast('Cuenta creada');go('shop')}
+
+/* ---------- Administración ---------- */
+function admin(){
+ if(!S.user||S.user.role!='admin')return '<p>Esta sección es solo para administradores.</p>';
+ const tabs=['resumen','reportes','productos','pedidos','clientes','alquiler','quejas','ajustes'];
+ return `<div class="bar">${tabs.map(t=>`<button class="chip ${S.tab==t?'on':''}" onclick="S.tab='${t}';render()">${t[0].toUpperCase()+t.slice(1)}${t=='alquiler'&&pendRes()?' ('+pendRes()+')':''}</button>`).join('')}</div>`+adminTab();
+}
+function adminTab(){
+ if(S.tab=='productos')return adminProds();
+ if(S.tab=='quejas')return adminQuejas();
+ if(S.tab=='alquiler')return adminRent();
+ if(S.tab=='reportes')return adminRep();if(S.tab=='ajustes')return adminSet();
+ const paid=db.orders.filter(o=>o.status!='Cancelado');
+ if(S.tab=='resumen'){
+  const by=m=>paid.filter(o=>o.method==m).reduce((a,o)=>a+o.total,0);
+  return `<div class="stats"><div class="panel stat"><b>${fmt(paid.reduce((a,o)=>a+o.total,0))}</b>Ventas</div>
+  <div class="panel stat"><b>${db.orders.length}</b>Pedidos</div><div class="panel stat"><b>${db.users.filter(u=>u.role=='cliente').length}</b>Clientes</div>
+  <div class="panel stat"><b>${db.products.filter(p=>p.stock<5).length}</b>Productos con poco stock</div></div>
+  <div class="panel"><h3 style="margin-bottom:10px">Ventas por método de pago</h3>${Object.entries(PAYS).map(([k,v])=>`<div class="row" style="justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line)"><span>${v}</span><b>${fmt(by(k))}</b></div>`).join('')}</div>`;
+ }
+ if(S.tab=='productos')return `<div class="panel"><h3 style="margin-bottom:10px">Agregar producto</h3><div class="row">
+  <input id="pn" placeholder="Nombre" style="flex:2;min-width:160px;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--surface)">
+  <select id="pc" style="padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--surface)">${CATS.map(c=>`<option>${c}</option>`).join('')}</select>
+  <input id="pp" type="number" min="0" placeholder="Precio COP" style="padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);width:140px">
+  <input id="ps" type="number" min="0" placeholder="Stock" style="padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);width:90px">
+  <button class="btn" onclick="addProd()">Agregar producto</button></div></div>
+  <div class="panel tbl"><table><tr><th>Producto</th><th>Precio</th><th>Stock</th><th></th></tr>${db.products.map(p=>`<tr><td>${esc(p.name)}</td>
+  <td><input type="number" value="${p.price}" onchange="upd(${p.id},'price',this.value)" aria-label="Precio"></td>
+  <td><input type="number" value="${p.stock}" style="width:70px" onchange="upd(${p.id},'stock',this.value)" aria-label="Stock"></td>
+  <td><button class="btn alt sm" onclick="delProd(${p.id})">Eliminar</button></td></tr>`).join('')}</table></div>`;
+ if(S.tab=='pedidos')return `<div class="panel tbl">${db.orders.length?`<table><tr><th>#</th><th>Cliente</th><th>Total</th><th>Pago</th><th>Estado</th></tr>${db.orders.slice().reverse().map(o=>{const u=db.users.find(x=>x.id==o.userId);
+  return `<tr><td>${o.id}</td><td>${esc(u?u.name:'—')}<br><small>${esc(o.addr)}</small></td><td>${fmt(o.total)}</td><td>${PAYS[o.method].split(' (')[0]}<br><small>${esc(o.ref)}</small></td>
+  <td><select onchange="setSt(${o.id},this.value)" style="width:130px">${STATES.map(s=>`<option ${s==o.status?'selected':''}>${s}</option>`).join('')}</select> <button class="btn alt sm" onclick="invoice(${o.id})">Factura PDF</button></td></tr>`}).join('')}</table>`:'<p>Todavía no hay pedidos. Aparecerán aquí cuando un cliente compre.</p>'}</div>`;
+ const cl=db.users.filter(u=>u.role=='cliente');
+ return `<div class="panel tbl">${cl.length?`<table><tr><th>Nombre</th><th>Correo</th><th>Pedidos</th><th>Total comprado</th></tr>${cl.map(u=>{const os=db.orders.filter(o=>o.userId==u.id);
+  return `<tr><td>${esc(u.name)}</td><td>${esc(u.email)}</td><td>${os.length}</td><td>${fmt(os.reduce((a,o)=>a+o.total,0))}</td></tr>`}).join('')}</table>`:'<p>Aún no hay clientes registrados.</p>'}</div>`;
+}
+function addProd(){const n=$('#pn').value.trim(),p=+$('#pp').value,s=+$('#ps').value;
+ if(!n||p<=0||s<0)return toast('Completa nombre, precio y stock');
+ db.products.push({id:db.nextId++,name:n,cat:$('#pc').value,price:p,stock:s});save();render();toast('Producto agregado')}
+function upd(id,k,v){db.products.find(p=>p.id==id)[k]=Math.max(0,+v||0);save();toast('Cambios guardados')}
+function delProd(id){if(confirm('¿Eliminar este producto?')){db.products=db.products.filter(p=>p.id!=id);S.cart=S.cart.filter(i=>i.id!=id);save();render()}}
+function setSt(id,s){db.orders.find(o=>o.id==id).status=s;save();toast('Estado actualizado')}
+
+function match(p){return (S.cat=='Todos'||p.cat==S.cat)&&(p.name+' '+(p.desc||'')+' '+(p.tags||[]).join(' ')).toLowerCase().includes(S.q.toLowerCase())}
+function tagsHtml(p){return (p.tags&&p.tags.length)?`<span class="tags">${p.tags.map(t=>`<button class="tag" data-t="${esc(t)}" onclick="tagSearch(this.dataset.t)">${esc(t)}</button>`).join('')}</span>`:''}
+function tagSearch(t){S.q=t;S.cat='Todos';closeModal();go('shop')}
+function detail(id){const p=db.products.find(x=>x.id==id);openModal(`<div class="tile" style="height:220px;border-radius:10px;font-size:80px">${p.img?`<img src="${p.img}" alt="${esc(p.name)}">`:ICON[p.cat]}</div><h2 style="margin-top:12px">${esc(p.name)}</h2><small>${p.cat}</small>${tagsHtml(p)}<p>${esc(p.desc)||'Este producto aún no tiene descripción.'}</p><div class="price">${fmt(p.price)}</div><small>${p.stock?p.stock+' disponibles':'Agotado'}</small><div class="row" style="margin-top:12px"><button class="btn" ${p.stock?'':'disabled'} onclick="add(${p.id});closeModal()">Agregar al carrito</button>${waA('Preguntar por WhatsApp','Hola, me interesa: '+p.name+' ('+fmt(p.price)+'). ¿Me puedes dar más información?')}<button class="btn alt" onclick="closeModal()">Cerrar</button></div>`)}
+function logout(){S.user=null;toast('Sesión cerrada');go('shop')}
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.target.id==='le'||e.target.id==='lp'||e.target.id==='lc'))login()});
+
+/* Productos: formulario con imagen, descripción y etiquetas */
+let draftImg='';
+function adminProds(){return `<div class="panel"><button class="btn" onclick="prodForm(0)">Nuevo producto</button></div><div class="panel tbl"><table><tr><th></th><th>Producto</th><th>Etiquetas</th><th>Precio</th><th>Stock</th><th></th></tr>${db.products.map(p=>`<tr><td><div class="tile" style="width:56px;height:44px;font-size:22px;border-radius:6px">${p.img?`<img src="${p.img}" alt="">`:ICON[p.cat]}</div></td><td>${esc(p.name)}</td><td>${esc((p.tags||[]).join(', '))}</td><td>${fmt(p.price)}</td><td>${p.stock}</td><td><button class="btn alt sm" onclick="prodForm(${p.id})">Editar</button> <button class="btn alt sm" onclick="delProd(${p.id})">Eliminar</button></td></tr>`).join('')}</table></div>`}
+function prodForm(id){const p=id?db.products.find(x=>x.id==id):{name:'',cat:CATS[0],price:'',stock:'',desc:'',tags:[],img:''};draftImg=p.img||'';
+openModal(`<h2>${id?'Editar':'Nuevo'} producto</h2><div class="f" style="margin-top:12px"><label>Nombre<input id="fn" value="${esc(p.name)}"></label>
+<label>Categoría<select id="fc">${CATS.map(c=>`<option ${c==p.cat?'selected':''}>${c}</option>`).join('')}</select></label>
+<div class="row"><label style="flex:1">Precio (COP)<input id="fp" type="number" min="0" value="${p.price}"></label><label style="flex:1">Stock<input id="fs" type="number" min="0" value="${p.stock}"></label></div>
+<label>Descripción<textarea id="fd" rows="3">${esc(p.desc)}</textarea></label>
+<label>Etiquetas (separadas por coma)<input id="ft" value="${esc((p.tags||[]).join(', '))}" placeholder="acústica, principiante"></label>
+<label>Imagen<input id="fi" type="file" accept="image/*" onchange="pickImg(this)"></label>
+<div id="fprev">${p.img?`<img src="${p.img}" alt="Vista previa" style="max-width:160px;border-radius:8px">`:''}</div>
+<button class="btn" onclick="saveProd(${id||0})">Guardar producto</button></div>`)}
+function pickImg(el){const f=el.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,640/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);draftImg=c.toDataURL('image/jpeg',.8);$('#fprev').innerHTML=`<img src="${draftImg}" alt="Vista previa" style="max-width:160px;border-radius:8px">`};im.onerror=()=>toast('No se pudo leer esa imagen');im.src=r.result};r.readAsDataURL(f)}
+function saveProd(id){const n=$('#fn').value.trim(),pr=+$('#fp').value,st=+$('#fs').value;
+ if(!n||pr<=0||$('#fs').value===''||st<0)return toast('Completa nombre, precio y stock');
+ const d={name:n,cat:$('#fc').value,price:pr,stock:st,desc:$('#fd').value.trim(),tags:$('#ft').value.split(',').map(t=>t.trim().toLowerCase()).filter(Boolean),img:draftImg};
+ if(id)Object.assign(db.products.find(p=>p.id==id),d);else db.products.push({id:db.nextId++,...d});
+ const ok=save();closeModal();render();toast(ok?'Producto guardado':'Guardado solo en esta sesión: la imagen ocupa demasiado espacio')}
+
+/* Factura en PDF */
+async function invoice(id){const o=db.orders.find(x=>x.id==id),u=db.users.find(x=>x.id==o.userId)||{name:'—',email:'—'};
+ const J=window.jspdf&&window.jspdf.jsPDF;if(!J)return toast('No se pudo cargar el generador de PDF');
+ let d=null;try{d=await claude.use('downloads')}catch(e){}
+ if(!d)return toast('La descarga no está disponible en esta vista');
+ const doc=new J();let y=20;
+ doc.setFontSize(20);doc.text('7tono',14,y);doc.setFontSize(10);doc.text('Instrumentos y equipos de sonido',14,y+6);
+ doc.setFontSize(16);doc.text('Factura #'+String(o.id).padStart(5,'0'),196,y,{align:'right'});
+ y+=20;doc.setFontSize(10);
+ doc.text('Fecha: '+o.date,14,y);doc.text('Cliente: '+u.name,14,y+6);doc.text('Correo: '+u.email,14,y+12);doc.text('Envío: '+o.addr,14,y+18);doc.text('Pago: '+PAYS[o.method]+(o.ref?' ('+o.ref+')':''),14,y+24);doc.text('Estado: '+o.status,14,y+30);
+ y+=44;doc.setFont(undefined,'bold');doc.text('Producto',14,y);doc.text('Cant.',120,y);doc.text('Precio',160,y,{align:'right'});doc.text('Subtotal',196,y,{align:'right'});doc.line(14,y+2,196,y+2);doc.setFont(undefined,'normal');
+ o.items.forEach(i=>{if(y>265){doc.addPage();y=20}y+=8;doc.text(doc.splitTextToSize(i.name,95)[0],14,y);doc.text(String(i.q),120,y);doc.text(fmt(i.price),160,y,{align:'right'});doc.text(fmt(i.price*i.q),196,y,{align:'right'})});
+ y+=6;doc.line(14,y,196,y);doc.setFontSize(10);if(o.sub!=null){[['Subtotal',fmt(o.sub)],o.disc?['Descuento','-'+fmt(o.disc)]:null,['Envío',o.ship?fmt(o.ship):'Gratis'],['IVA incluido',fmt(o.iva)]].filter(Boolean).forEach(([a,b])=>{y+=6;doc.text(a,150,y);doc.text(b,196,y,{align:'right'})});y+=2}doc.setFontSize(13);doc.setFont(undefined,'bold');doc.text('Total: '+fmt(o.total),196,y+9,{align:'right'});
+ doc.setFont(undefined,'normal');doc.setFontSize(8);doc.text('Documento de demostración, sin validez fiscal.',14,285);
+ try{await d.save({filename:'factura-'+String(o.id).padStart(5,'0')+'.pdf',data:doc.output('blob')})}catch(e){if(!e||e.code!=='declined')toast('No se pudo guardar la factura')}}
+
+/* Quiénes somos */
+function about(){return `<section class="hero" style="grid-template-columns:1fr"><div><h1>Somos músicos atendiendo a músicos.</h1><p>7tono reúne instrumentos y equipos de sonido para que estudiar, grabar y tocar en vivo sea más fácil: catálogo claro, asesoría honesta y compra segura.</p></div></section>
+<div class="grid" style="margin-top:16px">${[['Qué hacemos','Vendemos guitarras, teclados, micrófonos, interfaces de audio, audífonos y parlantes para principiantes, estudios y escenarios.'],['Cómo trabajamos','Cada producto tiene descripción y etiquetas para comparar con calma. Si dudas, te orientamos antes de comprar.'],['Compra segura','Varios métodos de pago, seguimiento de tu pedido y factura en PDF descargable desde tu cuenta.'],['Nuestro compromiso','Atendemos tus quejas y reclamos con un radicado y te respondemos en máximo 15 días hábiles.']].map(([t,b])=>`<div class="panel" style="margin:0"><h3 style="margin-bottom:6px">${t}</h3><p style="margin:0">${b}</p></div>`).join('')}</div>
+<div class="panel" style="margin-top:16px"><h3 style="margin-bottom:6px">Contacto</h3><p style="margin:0">Escríbenos por WhatsApp, visítanos o revisa las preguntas frecuentes.</p><div class="row" style="margin-top:12px"><button class="btn" onclick="go('contacto')">Contacto</button><button class="btn alt" onclick="go('quejas')">Quejas</button><button class="btn alt" onclick="go('shop')">Ver la tienda</button></div></div>`}
+
+/* Términos y condiciones */
+const TERMS=[['1. Aceptación y uso del sitio','Al usar este sitio y comprar en él aceptas estos términos. Si no estás de acuerdo con alguno, te pedimos no usar el sitio.'],
+['2. Cuentas de usuario','Debes dar datos verdaderos y proteger tu contraseña. Eres responsable de la actividad que ocurra en tu cuenta.'],
+['3. Productos, precios y existencias','Los precios están en pesos colombianos (COP). Pueden cambiar sin previo aviso, pero se factura el precio vigente al momento de pagar. Las ventas dependen de las existencias: si un producto se agota después de tu compra, te avisaremos y te devolveremos lo pagado.'],
+['4. Métodos de pago','Aceptamos tarjeta de crédito o débito, PSE, Nequi o Daviplata y pago contra entrega. Los pagos electrónicos se confirman cuando son aprobados. En contra entrega, el pedido queda pendiente hasta recibir el dinero. No almacenamos los datos completos de tu tarjeta.'],
+['5. Envíos y entregas','Despachamos a todo el país. Los plazos dependen de la ciudad de destino y de la transportadora. Debes dar una dirección correcta y completa.'],
+['6. Retracto, cambios y devoluciones','En compras a distancia puedes ejercer el derecho de retracto dentro de los 5 días hábiles siguientes a la entrega, con el producto sin uso y en su empaque original, conforme a la Ley 1480 de 2011 (Estatuto del Consumidor). Los costos de transporte de la devolución corren por cuenta del cliente. El retracto no aplica a productos hechos a la medida.'],
+['7. Garantía','Los productos tienen la garantía legal de la Ley 1480 de 2011 y, cuando aplique, la garantía del fabricante. Para hacerla efectiva, escríbenos con tu número de pedido o tu factura.'],
+['8. Tratamiento de datos personales','Tratamos tus datos conforme a la Ley 1581 de 2012 para gestionar pedidos, facturas y solicitudes. Puedes conocer, actualizar, rectificar o pedir la supresión de tus datos escribiendo al correo indicado en la sección Contacto.'],
+['9. Peticiones, quejas y reclamos','Puedes enviarlas desde la sección Quejas. Recibirás un radicado y una respuesta en máximo 15 días hábiles. Si no quedas conforme, puedes acudir a la Superintendencia de Industria y Comercio.'],
+['10. Cambios a estos términos y ley aplicable','Podemos actualizar estos términos; la versión publicada en el sitio es la vigente. Se rigen por las leyes de Colombia.']];
+function terms(){return `<div class="panel"><h1 style="font-size:32px">Términos y condiciones</h1><p style="margin:8px 0 0">Última actualización: noviembre de 2026. Titular: [razón social], NIT [número].</p></div>${TERMS.map(([t,b],i)=>`<details class="panel" ${i?'':'open'}><summary>${t}</summary><p>${b}</p></details>`).join('')}`}
+
+/* Quejas y reclamos */
+const rad=id=>'PQR-'+String(id).padStart(5,'0');
+function quejas(){const u=S.user||{},mine=S.user?db.complaints.filter(c=>c.email==u.email).reverse():[];
+ return `<div class="panel"><h1 style="font-size:32px">Quejas, reclamos y sugerencias</h1><p>Cuéntanos qué pasó. Te daremos un radicado y responderemos en máximo 15 días hábiles.</p>
+<div class="f"><label>Tipo de solicitud<select id="qt"><option>Queja</option><option>Reclamo</option><option>Petición</option><option>Sugerencia</option></select></label>
+<label>Nombre completo<input id="qn" value="${esc(u.name||'')}"></label><label>Correo de contacto<input id="qe" type="email" value="${esc(u.email||'')}"></label>
+<label>Número de pedido (opcional)<input id="qo" inputmode="numeric"></label><label>Mensaje<textarea id="qm" rows="5" placeholder="Describe lo ocurrido con el mayor detalle posible"></textarea></label>
+<label style="display:flex;gap:8px;align-items:center"><input id="qa" type="checkbox"> Autorizo el tratamiento de mis datos para gestionar esta solicitud.</label>
+<button class="btn" onclick="sendQ()">Enviar solicitud</button></div></div>
+${S.user?`<div class="panel tbl"><h3 style="margin-bottom:8px">Mis solicitudes</h3>${mine.length?`<table><tr><th>Radicado</th><th>Tipo</th><th>Fecha</th><th>Estado</th></tr>${mine.map(c=>`<tr><td>${rad(c.id)}</td><td>${esc(c.type)}</td><td>${c.date}</td><td><span class="tag">${c.status}</span></td></tr>`).join('')}</table>`:'<p>Todavía no has enviado solicitudes.</p>'}</div>`:''}`}
+function sendQ(){const g=i=>$(i).value.trim();const c={type:g('#qt'),name:g('#qn'),email:g('#qe').toLowerCase(),order:g('#qo'),msg:g('#qm')};
+ if(!c.name||!/^\S+@\S+\.\S+$/.test(c.email))return toast('Escribe tu nombre y un correo válido');
+ if(c.msg.length<10)return toast('Cuéntanos un poco más en el mensaje');
+ if(!$('#qa').checked)return toast('Debes autorizar el tratamiento de tus datos');
+ c.id=db.nextId++;c.date=new Date().toISOString().slice(0,10);c.status='Recibida';db.complaints.push(c);save();
+ openModal(`<h2>Solicitud recibida</h2><p>Tu radicado es <b>${rad(c.id)}</b>. Responderemos a ${esc(c.email)} en máximo 15 días hábiles.</p><button class="btn" onclick="closeModal()">Entendido</button>`);render()}
+function adminQuejas(){const l=db.complaints.slice().reverse();return `<div class="panel tbl">${l.length?`<table><tr><th>Radicado</th><th>Tipo</th><th>Cliente</th><th>Mensaje</th><th>Estado</th></tr>${l.map(c=>`<tr><td>${rad(c.id)}<br><small>${c.date}</small></td><td>${esc(c.type)}</td><td>${esc(c.name)}<br><small>${esc(c.email)}${c.order?' · Pedido #'+esc(c.order):''}</small></td><td style="max-width:320px">${esc(c.msg)}</td><td><select onchange="setQ(${c.id},this.value)" style="width:130px">${['Recibida','En trámite','Resuelta'].map(s=>`<option ${s==c.status?'selected':''}>${s}</option>`).join('')}</select></td></tr>`).join('')}</table>`:'<p>No hay quejas por ahora. Las que envíen los clientes aparecerán aquí.</p>'}</div>`}
+function setQ(id,s){db.complaints.find(c=>c.id==id).status=s;save();toast('Estado actualizado')}
+
+/* Configuración de la tienda: completa estos datos */
+const STORE={wa:'',tel:'',mail:'',addr:'',hours:'',payUrl:''}; // wa: número con indicativo y sin signos, ej. 573001234567
+Object.assign(STORE,db.store||{});
+const waUrl=m=>'https://wa.me/'+STORE.wa+'?text='+encodeURIComponent(m);
+function waA(label,msg,cls){cls=cls||'btn wa';return STORE.wa?`<a class="${cls}" href="${waUrl(msg)}" target="_blank" rel="noopener">${label}</a>`:`<a class="${cls}" href="#" onclick="event.preventDefault();toast('Falta configurar el número de WhatsApp de la tienda')">${label}</a>`}
+const acc=(t,sub,a)=>`<div class="panel"><h1 style="font-size:32px">${t}</h1><p style="margin:8px 0 0">${sub}</p></div>${a.map(([q,r],i)=>`<details class="panel" ${i?'':'open'}><summary>${q}</summary><p>${r}</p></details>`).join('')}`;
+
+/* Preguntas frecuentes */
+const FAQ=[['¿Cómo hago un pedido?','Agrega los productos al carrito, inicia sesión o crea tu cuenta, escribe la dirección de envío y elige el método de pago.'],
+['¿Qué métodos de pago aceptan?','Tarjeta de crédito o débito, PSE, Nequi o Daviplata y pago contra entrega.'],
+['¿Cuánto tarda el envío?','Depende de la ciudad de destino y de la transportadora. Escríbenos por WhatsApp para confirmar el plazo para tu ciudad.'],
+['¿Cómo sigo mi pedido?','Entra a tu cuenta y abre Mis pedidos: allí ves el estado (Pendiente, Pagado, Enviado o Entregado).'],
+['¿Dónde descargo mi factura?','En tu cuenta, dentro de Mis pedidos, pulsa Descargar PDF junto al pedido que necesites.'],
+['¿Puedo devolver un producto?','Sí. Tienes 5 días hábiles desde la entrega para ejercer el derecho de retracto, con el producto sin uso y en su empaque original. Mira los detalles en los Términos y condiciones.'],
+['¿Los productos tienen garantía?','Sí: la garantía legal y, cuando aplique, la del fabricante. Escríbenos con tu número de pedido para gestionarla.'],
+['¿Cómo elijo el instrumento o equipo adecuado?','Usa las etiquetas y la descripción de cada producto para comparar. Si sigues con dudas, un asesor te orienta por WhatsApp.'],
+['¿Cómo presento una queja o reclamo?','Desde la sección Quejas. Recibes un radicado y respondemos en máximo 15 días hábiles.'],
+['¿Mis datos están seguros?','No guardamos los datos completos de tu tarjeta y tratamos tu información según la Ley 1581 de 2012. Lee la Política de privacidad para más detalle.']];
+function faq(){return acc('Preguntas frecuentes','Respuestas rápidas a lo que más nos preguntan.',FAQ)+`<div class="panel"><h3 style="margin-bottom:10px">¿No encontraste tu respuesta?</h3><div class="row">${waA('Escribir por WhatsApp','Hola, tengo una pregunta sobre mi compra.')}<button class="btn alt" onclick="go('contacto')">Ver contacto</button></div></div>`}
+
+/* Política de privacidad */
+const PRIV=[['1. Responsable del tratamiento','[Razón social], NIT [número]. Para temas de datos personales escríbenos al correo indicado en la sección Contacto.'],
+['2. Datos que recogemos','Nombre, correo electrónico, dirección de envío, historial de pedidos, facturas y el contenido de las quejas o peticiones que nos envíes. De los pagos solo conservamos el método usado y una referencia parcial (por ejemplo, los últimos cuatro dígitos de la tarjeta); no guardamos el número completo ni el CVV.'],
+['3. Para qué usamos tus datos','Crear y administrar tu cuenta, procesar y entregar pedidos, emitir facturas, atender garantías, quejas y peticiones, y responder tus mensajes.'],
+['4. Tus derechos','Según la Ley 1581 de 2012 puedes conocer, actualizar y rectificar tus datos, pedir prueba de tu autorización, saber cómo los usamos, revocar la autorización o solicitar la supresión cuando no haya un deber legal de conservarlos, y presentar quejas ante la Superintendencia de Industria y Comercio.'],
+['5. Con quién los compartimos','Solo con quienes necesitamos para cumplir tu pedido: transportadoras, plataformas de pago y proveedores de facturación. No vendemos tus datos.'],
+['6. Seguridad y conservación','Aplicamos medidas razonables para proteger tu información y la conservamos mientras sea necesaria para las finalidades anteriores o para cumplir obligaciones legales, como las contables y tributarias.'],
+['7. Almacenamiento en tu navegador','Este sitio guarda información de tu cuenta y tu carrito en el almacenamiento local del navegador. Puedes borrarla desde la configuración de tu navegador.'],
+['8. WhatsApp','Si nos escribes por WhatsApp, tu número y tu mensaje también se rigen por las condiciones de WhatsApp. Los usamos solo para atender tu consulta.'],
+['9. Cambios a esta política','Si la actualizamos, publicaremos la nueva versión en esta página con su fecha.']];
+function privacy(){return acc('Política de privacidad','Última actualización: noviembre de 2026.',PRIV)}
+
+/* Contacto */
+function contacto(){const map=STORE.addr?`<a class="btn alt" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(STORE.addr)}" target="_blank" rel="noopener">Cómo llegar en Google Maps</a>`:`<a class="btn alt" href="#" onclick="event.preventDefault();toast('Falta configurar la dirección de la tienda')">Cómo llegar en Google Maps</a>`;
+ return `<div class="panel"><h1 style="font-size:32px">Contacto</h1><p style="margin:8px 0 0">Elige cómo prefieres hablar con nosotros. Por WhatsApp te respondemos más rápido.</p></div>
+<div class="grid"><div class="panel" style="margin:0"><h3 style="margin-bottom:10px">Escríbenos por WhatsApp</h3><div style="display:grid;gap:8px">${waA('Quiero asesoría para elegir','Hola, quiero asesoría para elegir un instrumento o equipo de sonido.')}${waA('Estado de mi pedido','Hola, quiero consultar el estado de mi pedido. Mi número de pedido es: ')}${waA('Garantía o devolución','Hola, necesito ayuda con una garantía o devolución. Mi número de pedido es: ')}</div></div>
+<div class="panel" style="margin:0"><h3 style="margin-bottom:10px">Visítanos</h3><p style="margin:0 0 4px">${esc(STORE.addr)||'[agrega tu dirección y ciudad]'}</p><p style="margin:0 0 12px">${esc(STORE.hours)||'[agrega tu horario]'}</p>${map}</div>
+<div class="panel" style="margin:0"><h3 style="margin-bottom:10px">Otros canales</h3><p style="margin:0 0 4px">Correo: ${STORE.mail?`<a href="mailto:${esc(STORE.mail)}">${esc(STORE.mail)}</a>`:'[agrega tu correo]'}</p><p style="margin:0 0 12px">Teléfono: ${STORE.tel?`<a href="tel:${esc(STORE.tel)}">${esc(STORE.tel)}</a>`:'[agrega tu número]'}</p><button class="btn alt" onclick="go('quejas')">Quejas y reclamos</button></div></div>`}
+
+fab();
+
+/* ---------- Alquiler de equipos ---------- */
+function seedRental(){const t=today();return{gear:[{id:1,name:'Parlante PA activo 15"',price:120000},{id:2,name:'Subwoofer activo 18"',price:180000},{id:3,name:'Consola digital de 16 canales',price:250000},{id:4,name:'Micrófono inalámbrico de mano',price:60000},{id:5,name:'Micrófono con cable',price:20000},{id:6,name:'Monitor de piso',price:70000},{id:7,name:'Kit de cables y soportes',price:40000},{id:8,name:'Set de luces LED (4 pares)',price:90000},{id:9,name:'Line array (par)',price:600000}],
+packages:[{id:11,name:'Íntimo',scale:'Pequeño',desc:'Reuniones, cumpleaños y conferencias.',price:0,items:[{eid:1,q:2},{eid:4,q:1},{eid:5,q:1},{eid:7,q:1}]},{id:12,name:'Fiesta',scale:'Mediano',desc:'Bodas, grados y fiestas con baile.',price:0,items:[{eid:1,q:2},{eid:2,q:2},{eid:3,q:1},{eid:4,q:2},{eid:6,q:2},{eid:7,q:1},{eid:8,q:1}]},{id:13,name:'Concierto',scale:'Grande',desc:'Conciertos y festivales al aire libre.',price:2200000,items:[{eid:9,q:1},{eid:2,q:4},{eid:3,q:1},{eid:4,q:4},{eid:6,q:4},{eid:7,q:2},{eid:8,q:2}]}],
+scales:{'Pequeño':{label:'Pequeño · hasta 100 personas',tech:150000},'Mediano':{label:'Mediano · 100 a 500 personas',tech:350000},'Grande':{label:'Grande · más de 500 personas',tech:800000}},
+reservations:[{id:db.nextId++,event:'Evento de ejemplo',name:'Ejemplo',email:'',phone:'',start:addD(t,6),end:addD(t,7),status:'Confirmada',total:0,block:true}]}}
+function ymd(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function today(){return ymd(new Date())}
+function addD(s,n){const d=new Date(s+'T00:00:00');d.setDate(d.getDate()+n);return ymd(d)}
+function nd(a,b){return Math.round((new Date(b+'T00:00:00')-new Date(a+'T00:00:00'))/864e5)+1}
+function fdate(s){return new Date(s+'T00:00:00').toLocaleDateString('es-CO',{day:'numeric',month:'short',year:'numeric'})}
+function gear(id){return db.rental.gear.find(g=>g.id==id)}
+function conflict(s,e,ig){return db.rental.reservations.find(r=>r.status!='Cancelada'&&r.id!=ig&&r.start<=e&&r.end>=s)}
+const RSTATES=['Pendiente','Confirmada','Cancelada'];
+const rcode=id=>'RES-'+String(id).padStart(5,'0');
+const _n=new Date();let R={scale:'Pequeño',pkg:null,items:{},start:'',end:'',cal:{y:_n.getFullYear(),m:_n.getMonth()},name:'',email:'',phone:'',event:''};
+const ra=()=>{$('#view').innerHTML=alquiler()};
+const kv=(a,b,s)=>`<div class="kv"${s?` style="${s}"`:''}><span>${a}</span><span>${b}</span></div>`;
+function pkgPrice(p){return p.price||p.items.reduce((a,i)=>a+(gear(i.eid)?gear(i.eid).price*i.q:0),0)}
+function rItems(){if(R.pkg==='custom')return Object.entries(R.items).filter(([,q])=>q>0).map(([e,q])=>({eid:+e,q}));const p=R.pkg&&db.rental.packages.find(x=>x.id==R.pkg);return p?p.items:[]}
+function perDay(){const p=R.pkg&&R.pkg!=='custom'?db.rental.packages.find(x=>x.id==R.pkg):null;return p?pkgPrice(p):rItems().reduce((a,i)=>a+(gear(i.eid)?gear(i.eid).price*i.q:0),0)}
+function pkgName(){if(R.pkg==='custom')return 'Equipo personalizado';const p=R.pkg&&db.rental.packages.find(x=>x.id==R.pkg);return p?p.name:''}
+function curCity(){const c=db.rental.cities;return c.find(x=>x.id==R.city)||c[0]}
+function quote(){const days=R.start&&R.end?nd(R.start,R.end):0,pd=perDay(),eq=pd*days,disc=days>=3?Math.round(eq*.1):0,tech=days?db.rental.scales[R.scale].tech*days:0,transport=days?curCity().fee:0,total=eq-disc+tech+transport,deposit=Math.round(total*db.rental.depositPct/100);return{days,pd,eq,disc,tech,transport,total,deposit,guarantee:Math.round(eq*(db.rental.guaPct||0)/100)}}
+function waMsg(){const q=quote();return 'Hola, quiero cotizar un alquiler de sonido. Escala: '+db.rental.scales[R.scale].label+'. Paquete: '+(pkgName()||'sin elegir')+'. Fechas: '+(R.start&&R.end?fdate(R.start)+' al '+fdate(R.end):'por definir')+(q.days&&rItems().length?'. Total estimado: '+fmt(q.total):'')+'.'}
+function setScale(k){R.scale=k;if(R.pkg!=='custom')R.pkg=null;ra()}
+function customize(id){const p=db.rental.packages.find(x=>x.id==id);R.items={};p.items.forEach(i=>R.items[i.eid]=i.q);R.pkg='custom';ra()}
+function gq(id,d){R.items[id]=Math.max(0,(R.items[id]||0)+d);ra()}
+function mon(d){let m=R.cal.m+d,y=R.cal.y;if(m<0){m=11;y--}if(m>11){m=0;y++}R.cal={y,m};ra()}
+function pickDay(d){if(!R.start||R.end||d<R.start){R.start=d;R.end=''}else if(rangeTaken(R.start,d,rItems())){toast('Entre esas fechas hay días ya reservados');R.start=d;R.end=''}else R.end=d;ra()}
+function cal(){const {y,m}=R.cal,off=(new Date(y,m,1).getDay()+6)%7,dim=new Date(y,m+1,0).getDate(),t=today();let c='';for(let i=0;i<off;i++)c+='<span></span>';
+ for(let d=1;d<=dim;d++){const s=y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0'),tk=dayTaken(s,rItems()),sel=s==R.start||s==R.end,rg=R.start&&R.end&&s>R.start&&s<R.end;
+ c+=`<button class="cd${tk?' tk':''}${sel?' sel':''}${rg?' rg':''}" ${tk||s<t?'disabled':''} onclick="pickDay('${s}')" aria-label="${fdate(s)}${tk?', ocupado':''}">${d}</button>`}
+ return `<div class="calh"><button class="btn alt sm" onclick="mon(-1)" aria-label="Mes anterior">‹</button><b style="text-transform:capitalize">${new Date(y,m,1).toLocaleDateString('es-CO',{month:'long',year:'numeric'})}</b><button class="btn alt sm" onclick="mon(1)" aria-label="Mes siguiente">›</button></div><div class="calg">${['Lu','Ma','Mi','Ju','Vi','Sá','Do'].map(x=>`<small>${x}</small>`).join('')}${c}</div>`}
+function alquiler(){const rs=db.rental,sc=rs.scales,q=quote(),ready=q.days>0&&rItems().length>0,pk=rs.packages.filter(p=>p.scale==R.scale);
+ if(S.user&&!R.email){R.name=R.name||S.user.name;R.email=S.user.email}
+ const mine=S.user?rs.reservations.filter(r=>r.email==S.user.email&&!r.block).reverse():[];
+ return `<section class="hero" style="grid-template-columns:1fr"><div><h1>Alquila el sonido de tu evento.</h1><p>Elige la escala, un paquete o arma el tuyo, y revisa en el calendario qué fechas están libres. Cotizas en minutos.</p></div></section>
+<div class="rent" style="margin-top:16px"><div>
+<div class="panel"><h3>1. ¿De qué tamaño es tu evento?</h3><div class="row">${Object.entries(sc).map(([k,v])=>`<button class="chip ${R.scale==k?'on':''}" onclick="setScale('${k}')">${v.label}</button>`).join('')}</div></div>
+<div class="panel"><h3>2. Elige un paquete o arma el tuyo</h3><div class="grid">${pk.map(p=>`<div class="card"><div class="b"><h3 style="font-size:18px">${esc(p.name)}</h3><small>${esc(p.desc)}</small><small>${p.items.map(i=>{const g=gear(i.eid);return g?i.q+'× '+esc(g.name):''}).filter(Boolean).join(' · ')}</small><div class="price">${fmt(pkgPrice(p))} <small>/ día</small></div><div class="row" style="margin-top:auto"><button class="btn ${R.pkg==p.id?'':'alt'} sm" onclick="R.pkg=${p.id};ra()">${R.pkg==p.id?'Elegido ✓':'Elegir'}</button><button class="btn alt sm" onclick="customize(${p.id})">Personalizar</button></div></div></div>`).join('')}
+<div class="card"><div class="b"><h3 style="font-size:18px">Armar el mío</h3><small>Elige cada equipo y la cantidad que necesitas.</small><button class="btn ${R.pkg==='custom'?'':'alt'} sm" style="margin-top:auto" onclick="R.pkg='custom';ra()">${R.pkg==='custom'?'Armando ✓':'Armar mi equipo'}</button></div></div></div>
+${R.pkg==='custom'?`<div class="tbl" style="margin-top:12px"><table style="min-width:0">${rs.gear.map(g=>`<tr><td>${esc(g.name)}<br><small>${fmt(g.price)} / día</small></td><td style="white-space:nowrap"><button class="btn alt sm" onclick="gq(${g.id},-1)" aria-label="Quitar uno">−</button> ${R.items[g.id]||0} <button class="btn alt sm" onclick="gq(${g.id},1)" aria-label="Agregar uno">+</button></td></tr>`).join('')}</table></div>`:''}</div>
+<div class="panel"><h3>3. Elige las fechas</h3><p style="margin:0 0 10px">Los días tachados en rojo ya están reservados y no se pueden elegir.</p>${cal()}
+${R.start&&!R.end?`<p>Inicio: <b>${fdate(R.start)}</b>. Toca el último día del evento o <button class="btn alt sm" onclick="R.end=R.start;ra()">es un solo día</button></p>`:R.end?`<p>Del <b>${fdate(R.start)}</b> al <b>${fdate(R.end)}</b> (${q.days} ${q.days>1?'días':'día'}) <button class="btn alt sm" onclick="R.start=R.end='';ra()">Borrar fechas</button></p>`:'<p>Toca el primer día de tu evento.</p>'}</div>
+<div class="panel"><h3>4. Tus datos</h3><div class="f"><label>Nombre del evento<input value="${esc(R.event)}" oninput="R.event=this.value"></label><label>Tu nombre<input value="${esc(R.name)}" oninput="R.name=this.value"></label><label>Correo<input type="email" value="${esc(R.email)}" oninput="R.email=this.value"></label><label>Celular (10 dígitos)<input inputmode="numeric" maxlength="10" value="${esc(R.phone)}" oninput="R.phone=this.value"></label><label>Ciudad del evento (transporte)<select onchange="R.city=+this.value;ra()">${db.rental.cities.map(c=>`<option value="${c.id}" ${c.id==curCity().id?'selected':''}>${esc(c.name)}${c.fee?' · '+fmt(c.fee):''}</option>`).join('')}</select></label></div></div>
+${mine.length?`<div class="panel tbl"><h3>Mis reservas</h3><table><tr><th>Código</th><th>Evento</th><th>Fechas</th><th>Total</th><th>Estado</th><th></th></tr>${mine.map(r=>`<tr><td>${rcode(r.id)}</td><td>${esc(r.event)}</td><td>${fdate(r.start)}${r.end!=r.start?' → '+fdate(r.end):''}</td><td>${fmt(r.total)}</td><td><span class="tag">${r.status}</span>${r.depositPaid?'<br><small class="ok">Anticipo pagado</small>':r.depositPending?'<br><small>Pago por verificar</small>':''}</td><td>${r.status=='Pendiente'&&!r.depositPaid?`<button class="btn sm" onclick="payDep(${r.id})">Pagar anticipo</button> `:''}${r.status=='Pendiente'?`<button class="btn alt sm" onclick="cancelMine(${r.id})">Cancelar</button>`:''}${r.status=='Confirmada'?`<button class="btn alt sm" onclick="rentPdf(${r.id})">Factura PDF</button> <button class="btn alt sm" onclick="contractPdf(${r.id})">Contrato PDF</button>`:''}</td></tr>`).join('')}</table></div>`:''}</div>
+<aside class="panel quote"><h3>Tu cotización</h3>${kv('Escala',sc[R.scale].label.split(' · ')[0])}${kv('Paquete',esc(pkgName())||'—')}${rItems().map(i=>{const g=gear(i.eid);return g?`<small style="display:block">${i.q}× ${esc(g.name)}</small>`:''}).join('')}${kv('Fechas',R.start&&R.end?fdate(R.start)+(R.end!=R.start?' → '+fdate(R.end):''):'—')}
+${ready?kv('Equipos por día',fmt(q.pd))+kv('Días',q.days)+kv('Subtotal equipos',fmt(q.eq))+(q.disc?kv('Descuento 10% (3 o más días)','−'+fmt(q.disc)):'')+kv('Técnico y montaje',fmt(q.tech))+(q.transport?kv('Transporte ('+esc(curCity().name)+')',fmt(q.transport)):curCity().ask?kv('Transporte','Se cotiza aparte'):'')+kv('Total estimado','<b>'+fmt(q.total)+'</b>','font-size:18px')+kv('Anticipo para apartar ('+db.rental.depositPct+'%)',fmt(q.deposit))+kv('Saldo restante',fmt(q.total-q.deposit))+(q.guarantee?kv('Depósito de garantía (reembolsable)',fmt(q.guarantee)):''):'<p><small>Elige un paquete y las fechas para ver el valor.</small></p>'}
+<div style="display:grid;gap:8px;margin-top:12px"><button class="btn" onclick="reserve()">Solicitar reserva</button>${waA('Cotizar por WhatsApp',waMsg())}<button class="btn alt" onclick="quotePdf()">Descargar cotización PDF</button></div><small>El valor es una estimación. La reserva queda pendiente hasta que la confirmemos contigo.</small></aside></div>`}
+function reserve(){const q=quote();if(!q.days)return toast('Elige las fechas en el calendario');if(!rItems().length)return toast('Elige un paquete o arma tu equipo');
+ const c={name:R.name.trim(),email:R.email.trim().toLowerCase(),phone:R.phone.replace(/ /g,''),event:R.event.trim()};
+ if(!c.name||!c.event||!/^[^@ ]+@[^@ ]+[.][^@ ]+$/.test(c.email)||!/^[0-9]{10}$/.test(c.phone))return toast('Completa nombre del evento, tu nombre, correo y celular de 10 dígitos');
+ if(rangeTaken(R.start,R.end,rItems())){toast('Otra reserva ya tomó esas fechas. Elige otras.');R.start=R.end='';return ra()}
+ const r={id:db.nextId++,...c,scale:R.scale,pkgName:pkgName(),items:rItems().map(i=>({eid:i.eid,name:gear(i.eid).name,q:i.q,price:gear(i.eid).price})),start:R.start,end:R.end,days:q.days,pd:q.pd,eq:q.eq,disc:q.disc,tech:q.tech,transport:q.transport,city:curCity().name,total:q.total,deposit:q.deposit,guarantee:q.guarantee,guaReturned:false,depositPaid:false,status:'Pendiente',created:today()};
+ db.rental.reservations.push(r);save();R.start=R.end='';R.pkg=null;R.items={};
+ openModal(`<h2>¡Solicitud enviada!</h2><p>Tu código es <b>${rcode(r.id)}</b>. Las fechas ${fdate(r.start)}${r.end!=r.start?' al '+fdate(r.end):''} quedaron apartadas mientras confirmamos contigo. Total estimado: <b>${fmt(r.total)}</b>. Para asegurar la fecha se paga un anticipo de <b>${fmt(r.deposit)}</b> (${db.rental.depositPct}%). Puedes pagarlo ahora; si prefieres otro medio, escríbenos.</p><div class="row"><button class="btn" onclick="payDep(${r.id})">Pagar anticipo ahora</button><a class="btn alt" href="${mailRes(r)}">Enviar por correo</a>${waA('Confirmar por WhatsApp','Hola, acabo de solicitar la reserva '+rcode(r.id)+' para '+r.event+' ('+fdate(r.start)+' al '+fdate(r.end)+'). Quedo atento para confirmar.')}<button class="btn alt" onclick="closeModal()">Cerrar</button></div>`);ra()}
+function cancelMine(id){if(!confirm('¿Cancelar esta solicitud? Las fechas quedarán libres.'))return;db.rental.reservations.find(r=>r.id==id).status='Cancelada';save();ra();toast('Solicitud cancelada')}
+
+/* Administración del alquiler */
+function adminRent(){return pendNote()+adminRent0()+adminRentX()}
+function adminRent0(){const rs=db.rental,list=rs.reservations.slice().sort((a,b)=>b.start.localeCompare(a.start));
+ return `<div class="panel tbl"><h3>Reservas</h3>${list.length?`<table><tr><th>Código</th><th>Evento</th><th>Fechas</th><th>Total</th><th>Estado</th></tr>${list.map(r=>`<tr><td>${rcode(r.id)}</td><td>${esc(r.event)}<br><small>${esc(r.name)}${r.phone?' · '+esc(r.phone):''}${r.email?' · '+esc(r.email):''}</small>${r.items?`<br><small>${esc(r.pkgName)}: ${r.items.map(i=>i.q+'× '+esc(i.name)).join(', ')}</small>`:''}</td><td>${r.start}${r.end!=r.start?' → '+r.end:''}</td><td>${r.block?'—':fmt(r.total)}</td><td><select onchange="setRes(${r.id},this.value)" style="width:130px">${RSTATES.map(s=>`<option ${s==r.status?'selected':''}>${s}</option>`).join('')}</select></td></tr>`).join('')}</table>`:'<p>Aún no hay reservas.</p>'}</div>
+<div class="panel"><h3>Bloquear fechas (mantenimiento, evento propio…)</h3><div class="row"><input class="in" type="date" id="bs" aria-label="Desde"><input class="in" type="date" id="be" aria-label="Hasta"><input class="in" id="bm" placeholder="Motivo" style="flex:1;min-width:140px"><button class="btn" onclick="blockDates()">Bloquear</button></div></div>
+<div class="panel tbl"><h3>Paquetes</h3><table><tr><th>Paquete</th><th>Escala</th><th>Equipos</th><th>Precio por día</th><th></th></tr>${rs.packages.map(p=>`<tr><td>${esc(p.name)}</td><td>${p.scale}</td><td><small>${p.items.map(i=>{const g=gear(i.eid);return g?i.q+'× '+esc(g.name):''}).filter(Boolean).join(', ')}</small></td><td>${fmt(pkgPrice(p))}</td><td><button class="btn alt sm" onclick="pkgForm(${p.id})">Editar</button> <button class="btn alt sm" onclick="delPkg(${p.id})">Eliminar</button></td></tr>`).join('')}</table><div style="margin-top:10px"><button class="btn" onclick="pkgForm(0)">Nuevo paquete</button></div></div>
+<div class="panel tbl"><h3>Equipos y precio por día</h3><table><tr><th>Equipo</th><th>Precio por día</th><th>Unidades</th><th></th></tr>${rs.gear.map(g=>`<tr><td>${esc(g.name)}</td><td><input type="number" min="0" value="${g.price}" onchange="setGear(${g.id},this.value)" aria-label="Precio por día"></td><td><input type="number" min="1" value="${g.units||1}" style="width:70px" onchange="setUnits(${g.id},this.value)" aria-label="Unidades"></td><td><button class="btn alt sm" onclick="delGear(${g.id})">Eliminar</button></td></tr>`).join('')}</table><div class="row" style="margin-top:10px"><input class="in" id="gn" placeholder="Nuevo equipo" style="flex:1;min-width:160px"><input class="in" id="gp" type="number" min="0" placeholder="Precio por día" style="width:150px"><button class="btn" onclick="addGear()">Agregar equipo</button></div></div>
+<div class="panel tbl"><h3>Técnico y montaje por día, según la escala</h3><table style="min-width:0">${Object.entries(rs.scales).map(([k,v])=>`<tr><td>${v.label}</td><td><input type="number" min="0" value="${v.tech}" onchange="setTech('${k}',this.value)" aria-label="Tarifa"></td></tr>`).join('')}</table></div>`}
+function setRes(id,s){const r=db.rental.reservations.find(x=>x.id==id);if(s!='Cancelada'&&rangeTaken(r.start,r.end,(r.items||[]).filter(i=>i.eid!=null),id)){toast('Esas fechas ya las ocupa otra reserva');return render()}r.status=s;save();toast('Estado actualizado')}
+function blockDates(){const s=$('#bs').value,e=$('#be').value||s;if(!s||e<s)return toast('Elige un rango de fechas válido');if(conflict(s,e))return toast('Ya hay una reserva en esas fechas');
+ db.rental.reservations.push({id:db.nextId++,event:$('#bm').value.trim()||'Fechas bloqueadas',name:'Administración',email:'',phone:'',start:s,end:e,status:'Confirmada',total:0,block:true});save();render();toast('Fechas bloqueadas')}
+function pkgForm(id){const p=id?db.rental.packages.find(x=>x.id==id):{name:'',scale:'Pequeño',desc:'',items:[],price:0};
+ openModal(`<h2>${id?'Editar':'Nuevo'} paquete</h2><div class="f" style="margin-top:12px"><label>Nombre<input id="pn2" value="${esc(p.name)}"></label><label>Escala<select id="ps2">${Object.keys(db.rental.scales).map(s=>`<option ${s==p.scale?'selected':''}>${s}</option>`).join('')}</select></label><label>Descripción<textarea id="pd2" rows="2">${esc(p.desc)}</textarea></label><label>Precio por día en COP (vacío = suma de los equipos)<input id="pp2" type="number" min="0" value="${p.price||''}"></label><b>Equipos incluidos (cantidad)</b>${db.rental.gear.map(g=>`<label style="display:flex;justify-content:space-between;align-items:center;gap:10px">${esc(g.name)}<input type="number" min="0" data-g="${g.id}" value="${(p.items.find(i=>i.eid==g.id)||{}).q||0}" style="width:80px"></label>`).join('')}<button class="btn" onclick="savePkg(${id||0})">Guardar paquete</button></div>`)}
+function savePkg(id){const n=$('#pn2').value.trim(),items=[...document.querySelectorAll('input[data-g]')].map(i=>({eid:+i.dataset.g,q:Math.max(0,Math.floor(+i.value||0))})).filter(i=>i.q>0);
+ if(!n||!items.length)return toast('Escribe un nombre y elige al menos un equipo');
+ const d={name:n,scale:$('#ps2').value,desc:$('#pd2').value.trim(),price:Math.max(0,+$('#pp2').value||0),items};
+ if(id)Object.assign(db.rental.packages.find(x=>x.id==id),d);else db.rental.packages.push({id:db.nextId++,...d});save();closeModal();render();toast('Paquete guardado')}
+function delPkg(id){if(!confirm('¿Eliminar este paquete?'))return;db.rental.packages=db.rental.packages.filter(p=>p.id!=id);if(R.pkg==id)R.pkg=null;save();render()}
+function setGear(id,v){gear(id).price=Math.max(0,+v||0);save();toast('Precio guardado')}
+function delGear(id){if(!confirm('¿Eliminar este equipo? También saldrá de los paquetes.'))return;const rs=db.rental;rs.gear=rs.gear.filter(g=>g.id!=id);rs.packages.forEach(p=>p.items=p.items.filter(i=>i.eid!=id));delete R.items[id];save();render()}
+function addGear(){const n=$('#gn').value.trim(),p=+$('#gp').value;if(!n||p<=0)return toast('Escribe el nombre y el precio por día');db.rental.gear.push({id:db.nextId++,name:n,price:p});save();render();toast('Equipo agregado')}
+function setTech(k,v){db.rental.scales[k].tech=Math.max(0,+v||0);save();toast('Tarifa guardada')}
+
+/* Transporte, anticipo, correo, cotización y facturación del alquiler */
+function pendRes(){return db.rental.reservations.filter(r=>r.status=='Pendiente'&&!r.block).length}
+function pendNote(){const n=pendRes();return n?`<div class="panel" style="border-color:var(--amber)"><b>${n} ${n>1?'reservas nuevas pendientes':'reserva nueva pendiente'} de confirmar.</b> Revisa el estado en la tabla de reservas.</div>`:''}
+function mailRes(r){return 'mailto:'+STORE.mail+'?subject='+encodeURIComponent('Reserva '+rcode(r.id)+' - '+r.event)+'&body='+encodeURIComponent('Hola, solicité la reserva '+rcode(r.id)+' para '+r.event+' del '+fdate(r.start)+' al '+fdate(r.end)+'.\nTotal estimado: '+fmt(r.total)+'.\nContacto: '+r.name+', '+r.phone+', '+r.email)}
+function adminRentX(){const rs=db.rental,act=rs.reservations.filter(r=>!r.block&&r.status!='Cancelada').slice().reverse();
+ return `<div class="panel tbl"><h3>Anticipos y facturación</h3>${act.length?`<table><tr><th>Código</th><th>Evento</th><th>Total</th><th>Anticipo recibido</th><th>Garantía devuelta</th><th></th></tr>${act.map(r=>`<tr><td>${rcode(r.id)}</td><td>${esc(r.event)}</td><td>${fmt(r.total)}<br><small>${bk(r)}</small></td><td><label style="display:flex;gap:6px;align-items:center"><input type="checkbox" style="width:auto" ${r.depositPaid?'checked':''} onchange="setDep(${r.id},this.checked)"> ${fmt(r.deposit!=null?r.deposit:Math.round(r.total*rs.depositPct/100))}</label>${r.depositPending?'<small class="bad">Por verificar en la pasarela</small>':''}</td><td>${r.guarantee?`<label style="display:flex;gap:6px;align-items:center"><input type="checkbox" style="width:auto" ${r.guaReturned?'checked':''} onchange="setGua(${r.id},this.checked)"> ${fmt(r.guarantee)}</label>`:'—'}</td><td><button class="btn alt sm" onclick="rentPdf(${r.id})">Factura PDF</button> <button class="btn alt sm" onclick="contractPdf(${r.id})">Contrato PDF</button></td></tr>`).join('')}</table>`:'<p>Cuando haya reservas, aquí marcas el anticipo recibido y descargas la factura.</p>'}</div>
+<div class="panel"><h3>Porcentaje de anticipo</h3><div class="row" style="align-items:center"><input class="in" type="number" min="0" max="100" value="${rs.depositPct}" style="width:100px" onchange="setPct(this.value)" aria-label="Porcentaje de anticipo"><span>% del total para apartar la fecha</span></div></div>
+<div class="panel tbl"><h3>Transporte por ciudad o zona</h3><table><tr><th>Ciudad o zona</th><th>Valor</th><th></th></tr>${rs.cities.map(c=>`<tr><td>${esc(c.name)}</td><td><input type="number" min="0" value="${c.fee}" onchange="setCity(${c.id},this.value)" aria-label="Valor del transporte"></td><td><button class="btn alt sm" onclick="delCity(${c.id})">Eliminar</button></td></tr>`).join('')}</table><div class="row" style="margin-top:10px"><input class="in" id="cn2" placeholder="Nueva ciudad o zona" style="flex:1;min-width:160px"><input class="in" id="cf2" type="number" min="0" placeholder="Valor" style="width:130px"><button class="btn" onclick="addCity()">Agregar</button></div></div>`}
+function setDep(id,v){{const r=db.rental.reservations.find(x=>x.id==id);r.depositPaid=v;r.depositPending=false;if(v&&!r.depositDate)r.depositDate=today()}save();toast(v?'Anticipo marcado como recibido':'Anticipo desmarcado')}
+function setPct(v){db.rental.depositPct=Math.min(100,Math.max(0,+v||0));save();toast('Porcentaje guardado')}
+function setCity(id,v){db.rental.cities.find(c=>c.id==id).fee=Math.max(0,+v||0);save();toast('Valor guardado')}
+function delCity(id){if(db.rental.cities.length<2)return toast('Debe quedar al menos una opción de transporte');db.rental.cities=db.rental.cities.filter(c=>c.id!=id);save();render()}
+function addCity(){const n=$('#cn2').value.trim(),f=+$('#cf2').value;if(!n||f<0||$('#cf2').value==='')return toast('Escribe la ciudad y el valor');db.rental.cities.push({id:db.nextId++,name:n,fee:f});save();render();toast('Ciudad agregada')}
+function recFrom(r){return{title:'Factura de alquiler',code:'FA-'+String(r.id).padStart(5,'0'),date:today(),name:r.name,email:r.email,phone:r.phone,event:r.event,scale:r.scale,pkg:r.pkgName,items:r.items||[],start:r.start,end:r.end,days:r.days,pd:r.pd,eq:r.eq,disc:r.disc,tech:r.tech,transport:r.transport,city:r.city,total:r.total,deposit:r.deposit!=null?r.deposit:Math.round(r.total*db.rental.depositPct/100),paid:!!r.depositPaid,method:r.depositMethod,mref:r.depositRef,pdate:r.depositDate,inv:true}}
+function rentPdf(id){rentDoc(recFrom(db.rental.reservations.find(x=>x.id==id)))}
+function quotePdf(){const q=quote();if(!q.days||!rItems().length)return toast('Elige un paquete y las fechas para generar la cotización');
+ rentDoc({title:'Cotización',code:'COT-'+today().replace(/-/g,''),date:today(),name:R.name||'—',email:R.email||'—',phone:R.phone||'—',event:R.event||'—',scale:db.rental.scales[R.scale].label.split(' · ')[0],pkg:pkgName(),items:rItems().map(i=>({name:gear(i.eid).name,q:i.q,price:gear(i.eid).price})),start:R.start,end:R.end,days:q.days,pd:q.pd,eq:q.eq,disc:q.disc,tech:q.tech,transport:q.transport,city:curCity().name,total:q.total,deposit:q.deposit,paid:false,inv:false})}
+async function rentDoc(d){const J=window.jspdf&&window.jspdf.jsPDF;if(!J)return toast('No se pudo cargar el generador de PDF');
+ let dl=null;try{dl=await claude.use('downloads')}catch(e){}
+ if(!dl)return toast('La descarga no está disponible en esta vista');
+ const doc=new J();let y=20;
+ doc.setFontSize(20);doc.text('7tono',14,y);doc.setFontSize(10);doc.text('Alquiler de equipos de sonido',14,y+6);doc.setFontSize(16);doc.text(d.title+' '+d.code,196,y,{align:'right'});
+ y+=20;doc.setFontSize(10);
+ [['Fecha',fdate(d.date)],['Cliente',d.name],['Correo',d.email],['Celular',d.phone||'—'],['Evento',d.event],['Escala',d.scale],['Paquete',d.pkg||'—'],['Fechas',fdate(d.start)+(d.end!=d.start?' al '+fdate(d.end):'')+' ('+d.days+(d.days>1?' días)':' día)')],['Ciudad',d.city||'—']].concat(d.method?[['Pago del anticipo',PAYS[d.method].split(' (')[0]+(d.mref?' ('+d.mref+')':'')+(d.pdate?' · '+fdate(d.pdate):' · pendiente de verificación')]]:[]).forEach(([a,b])=>{doc.text(a+': '+b,14,y);y+=6});
+ y+=6;doc.setFont(undefined,'bold');doc.text('Equipo',14,y);doc.text('Cant.',130,y);doc.text('Precio por día',196,y,{align:'right'});doc.line(14,y+2,196,y+2);doc.setFont(undefined,'normal');
+ d.items.forEach(i=>{if(y>255){doc.addPage();y=20}y+=7;doc.text(doc.splitTextToSize(i.name,105)[0],14,y);doc.text(String(i.q),130,y);doc.text(fmt(i.price),196,y,{align:'right'})});
+ y+=10;if(y>235){doc.addPage();y=20}
+ const row=(a,b,bold)=>{doc.setFont(undefined,bold?'bold':'normal');doc.text(a,110,y);doc.text(b,196,y,{align:'right'});y+=7};
+ if(d.eq!=null){row('Equipos por día',fmt(d.pd));row('Subtotal ('+d.days+' d)',fmt(d.eq));if(d.disc)row('Descuento','-'+fmt(d.disc));row('Técnico y montaje',fmt(d.tech));if(d.transport)row('Transporte',fmt(d.transport))}
+ row('TOTAL',fmt(d.total),true);row(d.inv&&d.paid?'Anticipo recibido':'Anticipo para apartar',fmt(d.deposit));row(d.inv&&d.paid?'Saldo pendiente':'Saldo restante',fmt(d.total-d.deposit),true);
+ doc.setFont(undefined,'normal');doc.setFontSize(8);doc.text(d.inv?'Documento de demostración, sin validez fiscal.':'Valor estimado, sujeto a disponibilidad de fechas y a confirmación.',14,285);
+ try{await dl.save({filename:(d.inv?'factura-alquiler-':'cotizacion-')+d.code+'.pdf',data:doc.output('blob')})}catch(e){if(!e||e.code!=='declined')toast('No se pudo guardar el PDF')}}
+
+/* Desglose de reservas anteriores */
+function backfillRes(){const rs=db.rental;rs.reservations.forEach(r=>{if(r.block||r.pd!=null||!r.total||!r.start)return;const days=r.days||nd(r.start,r.end),tech=((rs.scales[r.scale]||{}).tech||0)*days,base=Math.max(0,r.total-tech),eq=days>=3?Math.round(base/0.9):base;Object.assign(r,{days,tech,eq,disc:eq-base,pd:Math.round(eq/days),transport:0,city:'No registrado',deposit:r.deposit!=null?r.deposit:Math.round(r.total*rs.depositPct/100),depositPaid:!!r.depositPaid})})}
+function bk(r){return 'Equipos '+fmt((r.eq||0)-(r.disc||0))+' · Técnico '+fmt(r.tech||0)+(r.transport?' · Transporte '+fmt(r.transport):'')}
+
+/* Pago del anticipo */
+function readPay(){const m=document.querySelector('input[name=pm]:checked').value;
+ if(m=='card'){const n=$('#cn').value.replace(/ /g,'');if(!/^[0-9]{13,19}$/.test(n)||!/^[0-9]{2}[/][0-9]{2}$/.test($('#cv').value)||!/^[0-9]{3,4}$/.test($('#cc').value)){toast('Revisa los datos de la tarjeta');return null}return{m,ref:'•••• '+n.slice(-4)}}
+ if(m=='nequi'){const t=$('#ph').value;if(!/^3[0-9]{9}$/.test(t)){toast('Escribe un celular válido de 10 dígitos');return null}return{m,ref:'***'+t.slice(-4)}}
+ if(m=='gw')return{m,ref:''};return{m,ref:$('#bk').value}}
+function payDep(id){const r=db.rental.reservations.find(x=>x.id==id);if(r.depositPaid)return toast('El anticipo de esta reserva ya está pagado');const amt=r.deposit!=null?r.deposit:Math.round(r.total*db.rental.depositPct/100);
+ openModal(`<h2>Pagar anticipo</h2><p>Reserva <b>${rcode(r.id)}</b> · ${esc(r.event)}<br>Anticipo: <b>${fmt(amt)}</b> de ${fmt(r.total)} (saldo ${fmt(r.total-amt)})</p><div class="f" style="max-width:none"><div class="pay">${['card','pse','nequi'].concat(gwOn()?['gw']:[]).map((k,i)=>`<label><input type="radio" name="pm" value="${k}" ${i?'':'checked'} onchange="payFields()"> ${PAYS[k]}</label>`).join('')}</div><div id="pf"></div><small>Pasarela simulada: no se procesa ningún cobro real ni se guardan datos de tarjeta.</small><button class="btn" onclick="confirmDep(${r.id},${amt})">Pagar ${fmt(amt)}</button></div>`);payFields()}
+function confirmDep(id,amt){const p=readPay();if(!p)return;const r=db.rental.reservations.find(x=>x.id==id);
+ if(p.m=='gw'){Object.assign(r,{deposit:amt,depositMethod:'gw',depositPending:true});save();openModal(`<h2>Completa el pago del anticipo</h2><p>Paga <b>${fmt(amt)}</b> en la pasarela y usa <b>${rcode(r.id)}</b> como referencia. Cuando verifiquemos el pago, el anticipo quedará marcado como recibido.</p>${payA(rcode(r.id))}<button class="btn alt" onclick="closeModal()">Cerrar</button>`);if(S.view=='alquiler')ra();return}Object.assign(r,{deposit:amt,depositPaid:true,depositMethod:p.m,depositRef:p.ref,depositDate:today()});save();
+ openModal(`<h2>¡Anticipo recibido!</h2><p>Pagaste <b>${fmt(amt)}</b> de la reserva ${rcode(r.id)}. Las fechas quedan apartadas mientras la confirmamos. Saldo restante: ${fmt(r.total-amt)}.</p><div class="row"><button class="btn" onclick="rentPdf(${r.id})">Descargar factura</button><button class="btn alt" onclick="closeModal()">Cerrar</button></div>`);if(S.view=='alquiler')ra();else if(S.view=='admin')render()}
+
+/* Verificación (captcha) al crear cuenta */
+let CAP={ans:'',mode:'img',txt:''};
+function capNew(){if(CAP.mode=='sum'){const a=1+Math.floor(Math.random()*9),b=1+Math.floor(Math.random()*9);CAP.ans=String(a+b);CAP.txt=a+' + '+b+' = ?'}else{const L='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';CAP.ans='';for(let i=0;i<5;i++)CAP.ans+=L[Math.floor(Math.random()*L.length)]}}
+function capInner(fresh){if(fresh)capNew();setTimeout(capDraw,0);return CAP.mode=='sum'?`<div class="capbox" role="img" aria-label="Suma de verificación"><b>${CAP.txt}</b></div>`:`<canvas id="capc" class="capbox" width="180" height="52" role="img" aria-label="Código de verificación de 5 caracteres"></canvas>`}
+function capDraw(){const c=$('#capc');if(!c)return;const x=c.getContext('2d');x.fillStyle='#e9edef';x.fillRect(0,0,180,52);
+ for(let i=0;i<7;i++){x.strokeStyle='hsl('+Math.floor(Math.random()*360)+',40%,45%)';x.beginPath();x.moveTo(Math.random()*180,Math.random()*52);x.lineTo(Math.random()*180,Math.random()*52);x.stroke()}
+ CAP.ans.split('').forEach((ch,i)=>{x.save();x.translate(18+i*32,34);x.rotate((Math.random()-.5)*.7);x.font='bold '+Math.floor(26+Math.random()*6)+'px sans-serif';x.fillStyle='#12232b';x.fillText(ch,-8,0);x.restore()})}
+function capRefresh(){$('#capw').innerHTML=capInner(true);$('#rc').value=''}
+function capMode(){CAP.mode=CAP.mode=='img'?'sum':'img';capRefresh()}
+function fab(){const o=document.querySelector('.wafab');if(o)o.remove();document.body.insertAdjacentHTML('beforeend',waA('💬 WhatsApp','Hola 7tono, quisiera información sobre sus productos.','btn wa wafab'))}
+function setStore(k,v){v=v.trim();if(k=='wa'){v=v.replace(/[^0-9]/g,'');if(v.length==10&&v[0]=='3')v='57'+v;if(v&&v.length<11)return toast('Escribe el número con indicativo, por ejemplo 573001234567')}
+ if(k=='payUrl'&&v&&!/^https:[/][/]/.test(v))return toast('El enlace debe empezar por https://');
+ db.store=db.store||{};db.store[k]=v;STORE[k]=v;save();fab();render();toast('Guardado')}
+
+/* Envío, IVA y cupones */
+function plist(){const l=db.products.filter(match);if(S.sort=='asc')l.sort((a,b)=>a.price-b.price);else if(S.sort=='desc')l.sort((a,b)=>b.price-a.price);return l}
+function calc(){const sh=db.shop,sub=total(),k=sh.coupons.find(x=>x.code==S.coupon&&x.active),disc=k?Math.round(sub*k.pct/100):0,base=sub-disc,ship=!sub||(sh.freeFrom&&sub>=sh.freeFrom)?0:sh.ship,iva=Math.round(base*sh.iva/(100+sh.iva));return{sub,disc,code:k?k.code:'',ship,iva,total:base+ship}}
+function summary(chk){const c=calc();return kv('Subtotal',fmt(c.sub))+(c.disc?kv('Cupón '+esc(c.code),'-'+fmt(c.disc)):'')+kv('Envío',c.ship?fmt(c.ship):'Gratis')+kv('IVA incluido ('+db.shop.iva+'%)',fmt(c.iva))+kv('Total','<b>'+fmt(c.total)+'</b>','font-size:18px')+(chk?'':`<div class="row" style="margin:10px 0"><input class="in" id="cp" placeholder="Cupón de descuento" style="flex:1"><button class="btn alt sm" onclick="applyCoupon()">Aplicar</button></div>`+(c.ship&&db.shop.freeFrom?`<small>Envío gratis desde ${fmt(db.shop.freeFrom)}.</small>`:''))}
+function applyCoupon(){const c=($('#cp').value||'').trim().toUpperCase();const k=db.shop.coupons.find(x=>x.code==c&&x.active);if(!k)return toast('Ese cupón no es válido');S.coupon=k.code;toast('Cupón aplicado: '+k.pct+'% de descuento');cartModal()}
+
+/* Disponibilidad por día o por inventario */
+function dayTaken(day,req,ig){const act=db.rental.reservations.filter(r=>r.status!='Cancelada'&&r.id!=ig&&r.start<=day&&r.end>=day);
+ if(db.rental.mode!='inventario')return act.length>0;
+ if(act.some(r=>r.block||!r.items||r.items.some(i=>i.eid==null)))return true;
+ return req.some(q=>{const g=gear(q.eid);const used=act.reduce((a,r)=>a+((r.items.find(i=>i.eid==q.eid)||{}).q||0),0);return g&&used+q.q>(g.units||1)})}
+function rangeTaken(s,e,req,ig){for(let d=s;d<=e;d=addD(d,1))if(dayTaken(d,req,ig))return true;return false}
+function setUnits(id,v){gear(id).units=Math.max(1,Math.floor(+v||1));save();toast('Unidades guardadas')}
+function setGua(id,v){db.rental.reservations.find(r=>r.id==id).guaReturned=v;save();toast(v?'Garantía marcada como devuelta':'Garantía desmarcada')}
+
+/* Ajustes de administración */
+function adminSet(){const sh=db.shop,rs=db.rental,st=STORE;return `<div class="panel"><h3>Datos de contacto y WhatsApp</h3><div class="f" style="max-width:none">${[['wa','WhatsApp (con indicativo, solo números)','tel'],['tel','Teléfono','tel'],['mail','Correo de contacto','email'],['addr','Dirección y ciudad','text'],['hours','Horario de atención','text'],['payUrl','Enlace de la pasarela de pago (https)','url']].map(([k,l,t])=>`<label>${l}<input type="${t}" value="${esc(st[k]||'')}" onchange="setStore('${k}',this.value)"></label>`).join('')}</div><p style="margin:10px 0 0">${waA('Probar mi WhatsApp','Hola, esto es una prueba desde 7tono.')}</p></div><div class="panel"><h3>Tienda: IVA y envío</h3><div class="f" style="max-width:none"><label>IVA incluido en los precios (%)<input type="number" min="0" value="${sh.iva}" onchange="setSh('iva',this.value)"></label><label>Valor del envío (COP)<input type="number" min="0" value="${sh.ship}" onchange="setSh('ship',this.value)"></label><label>Envío gratis desde (COP, 0 = nunca)<input type="number" min="0" value="${sh.freeFrom}" onchange="setSh('freeFrom',this.value)"></label></div></div>
+<div class="panel tbl"><h3>Cupones</h3><table style="min-width:0"><tr><th>Código</th><th>Descuento</th><th>Activo</th><th></th></tr>${sh.coupons.map((c,i)=>`<tr><td>${esc(c.code)}</td><td>${c.pct}%</td><td><input type="checkbox" style="width:auto" ${c.active?'checked':''} onchange="togCoupon(${i},this.checked)" aria-label="Activo"></td><td><button class="btn alt sm" onclick="delCoupon(${i})">Eliminar</button></td></tr>`).join('')}</table><div class="row" style="margin-top:10px"><input class="in" id="kc" placeholder="CÓDIGO" style="width:150px"><input class="in" id="kp" type="number" min="1" max="100" placeholder="% desc." style="width:110px"><button class="btn" onclick="addCoupon()">Agregar cupón</button></div></div>
+<div class="panel"><h3>Alquiler</h3><div class="f" style="max-width:none"><label>Disponibilidad<select onchange="db.rental.mode=this.value;save();toast('Guardado')"><option value="dia" ${rs.mode!='inventario'?'selected':''}>Un evento por día (bloquea el día completo)</option><option value="inventario" ${rs.mode=='inventario'?'selected':''}>Por inventario (según las unidades de cada equipo)</option></select></label><label>Depósito de garantía (% del subtotal de equipos)<input type="number" min="0" max="100" value="${rs.guaPct}" onchange="db.rental.guaPct=Math.min(100,Math.max(0,+this.value||0));save();toast('Guardado')"></label></div></div>`}
+function setSh(k,v){db.shop[k]=Math.max(0,+v||0);save();toast('Guardado')}
+function togCoupon(i,v){db.shop.coupons[i].active=v;save();toast('Guardado')}
+function delCoupon(i){db.shop.coupons.splice(i,1);save();render()}
+function addCoupon(){const c=$('#kc').value.trim().toUpperCase().replace(/ /g,''),p=Math.floor(+$('#kp').value);if(!c||p<1||p>100)return toast('Escribe un código y un descuento entre 1 y 100');if(db.shop.coupons.some(x=>x.code==c))return toast('Ese código ya existe');db.shop.coupons.push({code:c,pct:p,active:true});save();render()}
+
+/* Reportes y exportación */
+function bars(rows,plain){if(!rows.length)return '';const mx=Math.max(...rows.map(r=>r[1]),1);return rows.map(([l,v])=>`<div class="hb"><span>${esc(l)}</span><div class="hbt"><i style="width:${Math.round(v/mx*100)}%"></i></div><b>${plain?v+' uds':fmt(v)}</b></div>`).join('')}
+function adminRep(){const act=db.orders.filter(o=>o.status!='Cancelado'),rv=db.rental.reservations.filter(r=>!r.block&&r.status!='Cancelada'),months=[],n=new Date();
+ for(let i=5;i>=0;i--)months.push(ymd(new Date(n.getFullYear(),n.getMonth()-i,1)).slice(0,7));
+ const sum=(l,k,f)=>months.map(m=>[m,l.filter(x=>(x[k]||'').slice(0,7)==m).reduce((a,x)=>a+f(x),0)]),top={};act.forEach(o=>o.items.forEach(i=>top[i.name]=(top[i.name]||0)+i.q));
+ let occ=0;for(let i=0;i<30;i++)if(conflict(addD(today(),i),addD(today(),i)))occ++;
+ return `<div class="stats"><div class="panel stat"><b>${fmt(act.reduce((a,o)=>a+o.total,0))}</b>Ventas de la tienda</div><div class="panel stat"><b>${fmt(rv.reduce((a,r)=>a+r.total,0))}</b>Alquileres</div><div class="panel stat"><b>${Math.round(occ/30*100)}%</b>Días ocupados, próximos 30</div></div>
+<div class="panel"><h3>Ventas de la tienda por mes</h3>${bars(sum(act,'date',o=>o.total))}</div><div class="panel"><h3>Alquileres por mes de inicio</h3>${bars(sum(rv,'start',r=>r.total))}</div>
+<div class="panel"><h3>Productos más vendidos</h3>${bars(Object.entries(top).sort((a,b)=>b[1]-a[1]).slice(0,5),1)||'<p>Aún no hay ventas.</p>'}</div>
+<div class="panel"><h3>Exportar a Excel (CSV)</h3><div class="row"><button class="btn alt" onclick="csv('pedidos')">Pedidos</button><button class="btn alt" onclick="csv('clientes')">Clientes</button><button class="btn alt" onclick="csv('reservas')">Reservas</button></div></div>`}
+async function csv(w){let rows;
+ if(w=='pedidos')rows=[['Pedido','Fecha','Cliente','Total','Pago','Estado']].concat(db.orders.map(o=>{const u=db.users.find(x=>x.id==o.userId)||{};return[o.id,o.date,u.name,o.total,PAYS[o.method].split(' (')[0],o.status]}));
+ else if(w=='clientes')rows=[['Nombre','Correo','Pedidos','Total comprado']].concat(db.users.filter(u=>u.role=='cliente').map(u=>{const os=db.orders.filter(o=>o.userId==u.id);return[u.name,u.email,os.length,os.reduce((a,o)=>a+o.total,0)]}));
+ else rows=[['Código','Evento','Cliente','Inicio','Fin','Total','Estado']].concat(db.rental.reservations.filter(r=>!r.block).map(r=>[rcode(r.id),r.event,r.name,r.start,r.end,r.total,r.status]));
+ let d=null;try{d=await claude.use('downloads')}catch(e){}if(!d)return toast('La descarga no está disponible en esta vista');
+ const t='\ufeff'+rows.map(r=>r.map(v=>{let s=String(v==null?'':v);if(/^[=+@-]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"'}).join(',')).join('\n');
+ try{await d.save({filename:w+'.csv',data:new Blob([t],{type:'text/csv'})})}catch(e){if(!e||e.code!=='declined')toast('No se pudo guardar el archivo')}}
+
+/* Contrato de alquiler en PDF */
+async function pdfStart(){const J=window.jspdf&&window.jspdf.jsPDF;if(!J){toast('No se pudo cargar el generador de PDF');return null}let dl=null;try{dl=await claude.use('downloads')}catch(e){}if(!dl){toast('La descarga no está disponible en esta vista');return null}return{J,dl}}
+async function contractPdf(id){const r=db.rental.reservations.find(x=>x.id==id),p=await pdfStart();if(!p)return;const doc=new p.J(),dep=r.deposit!=null?r.deposit:Math.round(r.total*db.rental.depositPct/100);let y=20;
+ const H=t=>{if(y>270){doc.addPage();y=20}doc.setFont(undefined,'bold');doc.setFontSize(11);doc.text(t,14,y);y+=6;doc.setFont(undefined,'normal');doc.setFontSize(10)};
+ const P=t=>{doc.splitTextToSize(t,182).forEach(l=>{if(y>280){doc.addPage();y=20}doc.text(l,14,y);y+=5});y+=3};
+ doc.setFontSize(16);doc.text('Contrato de alquiler de equipos de sonido',14,y);y+=6;doc.setFontSize(10);doc.text('Contrato '+rcode(r.id)+' · '+fdate(today()),14,y);y+=10;
+ H('1. Partes');P('ARRENDADOR: 7tono ([razón social], NIT [número]). ARRENDATARIO: '+r.name+', correo '+r.email+', celular '+r.phone+'.');
+ H('2. Objeto');P('El arrendador entrega en alquiler los siguientes equipos para el evento "'+r.event+'" en '+(r.city||'la ciudad acordada')+': '+(r.items||[]).map(i=>i.q+' x '+i.name).join(', ')+'.');
+ H('3. Duración');P('Del '+fdate(r.start)+' al '+fdate(r.end)+' ('+r.days+(r.days>1?' días':' día')+'). Lugar y hora de entrega y recolección: [por definir].');
+ H('4. Precio y forma de pago');P('Valor total: '+fmt(r.total)+'. Anticipo: '+fmt(dep)+(r.depositPaid?' (recibido)':' (pendiente)')+'. Saldo: '+fmt(r.total-dep)+', pagadero [antes del evento / en la entrega].');
+ H('5. Depósito de garantía');P(r.guarantee?'El arrendatario entrega un depósito de garantía de '+fmt(r.guarantee)+', que se reembolsa al devolver los equipos completos y en buen estado. Podrán descontarse de él el valor de daños o faltantes.':'No se pacta depósito de garantía.');
+ H('6. Obligaciones del arrendatario');P('Usar los equipos solo para el evento indicado, no subarrendarlos, impedir su manipulación por personas no autorizadas, responder por su pérdida o daño y devolverlos en la fecha acordada.');
+ H('7. Obligaciones del arrendador');P('Entregar los equipos en correcto funcionamiento, con el montaje y el soporte técnico incluidos en la cotización.');
+ H('8. Cancelación y cambios');P('[Definir condiciones de cancelación, reprogramación y devolución del anticipo.]');
+ H('9. Ley aplicable');P('Este contrato se rige por las leyes de la República de Colombia.');
+ y+=14;if(y>260){doc.addPage();y=30}doc.line(14,y,90,y);doc.line(114,y,190,y);doc.text('Arrendador',14,y+5);doc.text('Arrendatario: '+r.name,114,y+5);
+ doc.setFontSize(8);doc.text('Plantilla de demostración: debe ser revisada por un abogado antes de usarla.',14,288);
+ try{await p.dl.save({filename:'contrato-'+rcode(r.id)+'.pdf',data:doc.output('blob')})}catch(e){if(!e||e.code!=='declined')toast('No se pudo guardar el contrato')}}
+
+/* Aviso de cookies */
+function ckOk(){try{localStorage.setItem('res-ck','1')}catch(e){}const k=$('#ck');if(k)k.remove()}
+function ckGo(ev){ev.preventDefault();ckOk();go('privacy')}
+try{if(!localStorage.getItem('res-ck'))document.body.insertAdjacentHTML('beforeend','<div id="ck" class="panel" style="position:fixed;left:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:25;margin:0;max-width:520px"><p style="margin:0 0 8px">Este sitio guarda tu sesión y tu carrito en tu navegador. <a href="#" onclick="ckGo(event)">Más información</a></p><button class="btn sm" onclick="ckOk()">Entendido</button></div>')}catch(e){}
+
+/* Inicio de sesión: verificación tras 3 fallos y pausa tras 5 */
+let LG={fails:0,until:0,a:0,b:0};
+function lgChallenge(){LG.a=1+Math.floor(Math.random()*9);LG.b=1+Math.floor(Math.random()*9);$('#lcw').innerHTML=`<label>Verificación: ¿cuánto es ${LG.a} + ${LG.b}?<input id="lc" inputmode="numeric" autocomplete="off"></label>`}
+
+/* Pasarela de pagos por enlace: STORE.payUrl debe ser un enlace https de tu pasarela */
+function gwOn(){return /^https:[/][/]/.test(STORE.payUrl)}
+function payA(ref){return gwOn()?`<div style="margin:10px 0"><a class="btn" href="${esc(STORE.payUrl)}" target="_blank" rel="noopener">Ir a la pasarela de pago</a><p><small>Usa esta referencia: <b>${esc(ref)}</b></small></p></div>`:'<p class="bad">La pasarela aún no está configurada.</p>'}
+render();
+</script>
+</body>
+</html>
