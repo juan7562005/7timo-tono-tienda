@@ -80,6 +80,7 @@ a.btn{display:inline-block;text-decoration:none;text-align:center}.btn.wa{backgr
 <main class="wrap" id="view"></main>
 <footer><span>© 2026 7tono</span><button onclick="go('about')">Quiénes somos</button><button onclick="go('terms')">Términos y condiciones</button><button onclick="go('quejas')">Quejas y reclamos</button><button onclick="go('faq')">Preguntas frecuentes</button><button onclick="go('privacy')">Política de privacidad</button><button onclick="go('contacto')">Contacto</button></footer>
 <div id="modal" role="dialog" aria-modal="true"><div id="mbody"></div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 const $=s=>document.querySelector(s);
@@ -89,27 +90,80 @@ const CATS=['Guitarras','Teclados','Audio','Micrófonos','Parlantes'];
 const ICON={Guitarras:'🎸',Teclados:'🎹',Audio:'🎧',Micrófonos:'🎤',Parlantes:'🔊'};
 const PAYS={card:'Tarjeta de crédito o débito',pse:'PSE (transferencia bancaria)',nequi:'Nequi o Daviplata',cod:'Pago contra entrega',gw:'Pasarela de pagos (enlace seguro)'};
 const STATES=['Pendiente','Pagado','Enviado','Entregado','Cancelado'];
-const seed=()=>({nextId:20,
- products:[
-  {id:1,name:'Guitarra acústica Dreadnought',cat:'Guitarras',price:890000,stock:8},
-  {id:2,name:'Guitarra eléctrica estilo Strat',cat:'Guitarras',price:1450000,stock:5},
-  {id:3,name:'Teclado de 61 teclas sensitivo',cat:'Teclados',price:1190000,stock:6},
-  {id:4,name:'Piano digital de 88 teclas',cat:'Teclados',price:3200000,stock:3},
-  {id:5,name:'Interfaz de audio USB 2 canales',cat:'Audio',price:620000,stock:12},
-  {id:6,name:'Audífonos de estudio cerrados',cat:'Audio',price:380000,stock:15},
-  {id:7,name:'Micrófono de condensador XLR',cat:'Micrófonos',price:540000,stock:9},
-  {id:8,name:'Micrófono dinámico vocal',cat:'Micrófonos',price:260000,stock:20},
-  {id:9,name:'Monitor de estudio activo 5"',cat:'Parlantes',price:780000,stock:7},
-  {id:10,name:'Parlante PA activo 15"',cat:'Parlantes',price:2100000,stock:4}],
- users:[{id:1,name:'Administrador',email:'admin@7tono.com',pass:'admin123',role:'admin'}],
- orders:[]});
-let db=null;
-try{db=JSON.parse(localStorage.getItem('resonancia-db'))}catch(e){}
-if(!db||!db.products)db=seed();
-const DEF={1:['Cuerpo dreadnought con tapa de abeto, ideal para acompañar la voz.','acústica,principiante,cuerdas'],2:['Tres micrófonos single coil y puente tremolo para rock y blues.','eléctrica,rock,cuerdas'],3:['61 teclas sensitivas con ritmos y sonidos integrados para aprender y componer.','teclas,principiante,estudio'],4:['88 teclas con acción de martillo y sonido de piano de cola.','piano,teclas,profesional'],5:['Dos entradas combo con preamplificadores y alimentación fantasma por USB.','grabación,estudio,usb'],6:['Respuesta plana para mezcla y monitoreo, con almohadillas cómodas.','estudio,monitoreo,cerrados'],7:['Cápsula grande para voces e instrumentos acústicos en estudio.','estudio,voz,xlr'],8:['Patrón cardioide que rechaza el ruido de sala, resistente para escenario.','voz,en vivo,xlr'],9:['Monitor activo biamplificado con respuesta precisa para producción musical.','estudio,monitoreo,activo'],10:['Potencia para eventos y bandas, con entradas XLR y de línea.','en vivo,activo,eventos']};
-db.complaints=db.complaints||[];if(!db.rental)db.rental=seedRental();if(!db.rental.cities){db.rental.cities=[{id:1,name:'Recoger en bodega',fee:0},{id:2,name:'Bogotá',fee:150000},{id:3,name:'Municipios cercanos',fee:280000},{id:4,name:'Otra ciudad (se cotiza aparte)',fee:0,ask:true}];db.rental.depositPct=30}backfillRes();if(db.rental.guaPct==null)db.rental.guaPct=20;db.users.forEach(u=>{if(u.email=='admin@resonancia.co')u.email='admin@7tono.com'});if(!db.shop)db.shop={iva:19,ship:15000,freeFrom:500000,coupons:[{code:'BIENVENIDA10',pct:10,active:true}]};
-db.products.forEach(p=>{const d=DEF[p.id];if(p.desc===undefined)p.desc=d?d[0]:'';if(!p.tags)p.tags=d?d[1].split(','):[];if(p.img===undefined)p.img=''});
-const save=()=>{try{localStorage.setItem('resonancia-db',JSON.stringify(db));return true}catch(e){return false}};
+const SUPA_URL='https://pgjulrvajklfcsqmlxyd.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBnanVscnZhamtsZmNzcW1seHlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ3OTM2MzYsImV4cCI6MjExMDM2OTYzNn0.99VMWmAf_5ui3CoxRZSQgBdbF3S0OMQzaMcLy08NCfs';
+const sb=supabase.createClient(SUPA_URL,SUPA_KEY);
+const emptyDb=()=>({users:[],products:[],orders:[],complaints:[],store:{},shop:{iva:19,ship:15000,freeFrom:500000,coupons:[]},rental:{gear:[],packages:[],reservations:[],scales:{},cities:[],depositPct:30,guaPct:20}});
+let db=emptyDb();
+/* ---- Mapeo objeto JS <-> tabla: [clave, columna, valorPorDefecto, esFecha] ---- */
+const T=[
+{t:'usuarios',a:d=>d.users,s:(d,v)=>{d.users=v},m:[['id','id'],['name','name',''],['email','email',''],['pass','pass',''],['role','role','cliente']]},
+{t:'productos',a:d=>d.products,s:(d,v)=>{d.products=v},m:[['id','id'],['name','name',''],['cat','cat',''],['price','price',0],['stock','stock',0],['desc','descr',''],['tags','tags',[]],['img','img','']]},
+{t:'pedidos',a:d=>d.orders,s:(d,v)=>{d.orders=v},m:[['id','id'],['userId','user_id'],['date','date',null,1],['items','items',[]],['sub','sub',0],['disc','disc',0],['ship','ship',0],['iva','iva',0],['coupon','coupon'],['total','total',0],['addr','addr'],['method','method'],['ref','ref'],['status','status','Pendiente']]},
+{t:'equipos_alquiler',a:d=>d.rental.gear,s:(d,v)=>{d.rental.gear=v},m:[['id','id'],['name','name',''],['price','price',0]]},
+{t:'paquetes_alquiler',a:d=>d.rental.packages,s:(d,v)=>{d.rental.packages=v},m:[['id','id'],['name','name',''],['scale','scale','Pequeño'],['desc','descr',''],['price','price',0],['items','items',[]]]},
+{t:'reservas_alquiler',a:d=>d.rental.reservations,s:(d,v)=>{d.rental.reservations=v},m:[['id','id'],['event','event'],['name','name'],['email','email'],['phone','phone'],['scale','scale'],['pkgName','pkg_name'],['items','items',[]],['start','start_date',null,1],['end','end_date',null,1],['days','days'],['pd','pd'],['eq','eq'],['disc','disc'],['tech','tech'],['transport','transport'],['city','city'],['total','total',0],['deposit','deposit'],['guarantee','guarantee'],['guaReturned','gua_returned',false],['depositPaid','deposit_paid',false],['depositPending','deposit_pending',false],['depositMethod','deposit_method'],['depositRef','deposit_ref'],['depositDate','deposit_date',null,1],['status','status','Pendiente'],['created','created',null,1],['block','block',false]]},
+{t:'quejas_pqr',a:d=>d.complaints,s:(d,v)=>{d.complaints=v},m:[['id','id'],['type','type',''],['name','name',''],['email','email',''],['order','order'],['msg','msg',''],['date','date',null,1],['status','status','Recibida']]}
+];
+const CFG=[
+['store',d=>d.store,(d,v)=>{d.store=v}],
+['shop',d=>d.shop,(d,v)=>{d.shop=v}],
+['rental_scales',d=>d.rental.scales,(d,v)=>{d.rental.scales=v}],
+['rental_cities',d=>d.rental.cities,(d,v)=>{d.rental.cities=v}],
+['rental_deposit_pct',d=>d.rental.depositPct,(d,v)=>{d.rental.depositPct=+v}],
+['rental_gua_pct',d=>d.rental.guaPct,(d,v)=>{d.rental.guaPct=+v}]
+];
+function toRow(o,m){const row={},used=new Set();
+ for(const [k,c,def,isD] of m){let v=o[k];if(v===undefined||v===null)v=def===undefined?null:def;if(isD&&v==='')v=null;row[c]=v;used.add(k)}
+ const extra={};for(const k in o){if(!used.has(k)&&o[k]!==undefined)extra[k]=o[k]}
+ row.extra=extra;return row}
+function fromRow(r,m){const o={...(r.extra||{})};for(const [k,c] of m){if(r[c]!==null&&r[c]!==undefined)o[k]=r[c]}return o}
+async function fetchAll(table,order){let out=[],from=0;for(;;){let q=sb.from(table).select('*');if(order)q=q.order(order);const {data,error}=await q.range(from,from+999);if(error)throw error;out=out.concat(data);if(data.length<1000)break;from+=1000}return out}
+async function pull(){
+ const rows=await Promise.all([...T.map(x=>fetchAll(x.t,'id')),fetchAll('configuracion_tienda')]);
+ const nd=emptyDb();
+ T.forEach((x,i)=>x.s(nd,rows[i].map(r=>fromRow(r,x.m))));
+ const cfg={};rows[T.length].forEach(r=>cfg[r.clave]=r.valor);
+ CFG.forEach(([k,,set])=>{if(cfg[k]!==undefined)set(nd,cfg[k])});
+ Object.defineProperty(nd,'nextId',{get:nid,set(){},configurable:true});
+ return nd}
+/* ---- IDs únicos globales (secuencia en la base de datos) ---- */
+let ID_POOL=[];let ID_BUSY=false;
+async function refillIds(){if(ID_BUSY)return;ID_BUSY=true;try{const {data,error}=await sb.rpc('reservar_ids',{n:30});if(error)throw error;ID_POOL=ID_POOL.concat(data)}catch(e){console.error(e)}finally{ID_BUSY=false}}
+function nid(){if(ID_POOL.length<8)refillIds();return ID_POOL.length?ID_POOL.shift():Date.now()*1000+Math.floor(Math.random()*1000)}
+/* ---- Sincronización: solo se envían las filas que cambiaron ---- */
+let SNAP={},CSNAP={};
+function snapOf(d){const s={},c={};T.forEach(x=>{const mp=new Map();x.a(d).forEach(o=>{const r=toRow(o,x.m);mp.set(r.id,JSON.stringify(r))});s[x.t]=mp});CFG.forEach(([k,get])=>{c[k]=JSON.stringify(get(d)===undefined?null:get(d))});return{s,c}}
+function snapStr(sn){return JSON.stringify([Object.entries(sn.s).map(([k,v])=>[k,[...v]]),sn.c])}
+function setSnap(d){const sn=snapOf(d);SNAP=sn.s;CSNAP=sn.c}
+async function sync(){
+ for(const x of T){
+  const seen=new Set(),up=[];
+  for(const o of x.a(db)){const row=toRow(o,x.m),j=JSON.stringify(row);seen.add(row.id);if(SNAP[x.t].get(row.id)!==j)up.push([row,j])}
+  const del=[...SNAP[x.t].keys()].filter(id=>!seen.has(id));
+  if(up.length){const {error}=await sb.from(x.t).upsert(up.map(u=>u[0]));if(error)throw error;up.forEach(([r,j])=>SNAP[x.t].set(r.id,j))}
+  if(del.length){const {error}=await sb.from(x.t).delete().in('id',del);if(error)throw error;del.forEach(id=>SNAP[x.t].delete(id))}
+ }
+ for(const [k,get] of CFG){const v=get(db),j=JSON.stringify(v===undefined?null:v);if(CSNAP[k]!==j){const {error}=await sb.from('configuracion_tienda').upsert({clave:k,valor:v===undefined?null:v});if(error)throw error;CSNAP[k]=j}}
+}
+let _syncT=null,_chain=Promise.resolve(),_pend=0;
+const save=()=>{if(!_syncT){_pend++;_syncT=setTimeout(()=>{_syncT=null;_chain=_chain.then(sync).catch(async e=>{console.error(e);toast('No se pudo guardar en la base de datos. Recargando datos…');try{await applyPull(true)}catch(_){}}).finally(()=>{_pend--})},0)}return true};
+async function applyPull(force){
+ const nd=await pull();
+ if(!force){if(_pend||_syncT)return;if(snapStr(snapOf(nd))===snapStr({s:SNAP,c:CSNAP}))return}
+ db=nd;setSnap(db);
+ if(S.user){const u=db.users.find(x=>x.id==S.user.id);if(u)S.user=u}
+ 
+ if(!$('#modal').classList.contains('on'))render()}
+async function bgPull(){if(_pend||_syncT)return;try{await applyPull(false)}catch(e){console.error(e)}}
+async function boot(){
+ $('#view').innerHTML='<div class="panel" style="text-align:center"><p>Cargando…</p></div>';
+ try{db=await pull();setSnap(db);await refillIds();Object.assign(STORE,db.store||{});fab();render()}
+ catch(e){console.error(e);$('#view').innerHTML='<div class="panel"><h3>No se pudo conectar con la base de datos</h3><p>Revisa tu conexión e inténtalo de nuevo.</p><button class="btn" onclick="boot()">Reintentar</button></div>'}}
+/* ---- Descargas estándar del navegador ---- */
+function dlBlob(name,blob){const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1500)}
+/* ---- Preferencia de cookies (cookie del navegador) ---- */
+const ckGet=()=>document.cookie.split('; ').some(c=>c==='res-ck=1');
 let S={view:'shop',cat:'Todos',q:'',cart:[],user:null,tab:'resumen'};
 
 function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.append(d);setTimeout(()=>d.remove(),2400)}
@@ -117,7 +171,7 @@ function openModal(h){$('#mbody').innerHTML='<button class="x" onclick="closeMod
 function closeModal(){$('#modal').classList.remove('on')}
 $('#modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
-function go(v){S.view=v;render()}
+function go(v){S.view=v;render();bgPull()}
 
 function nav(){
  const n=S.cart.reduce((a,i)=>a+i.q,0);
@@ -289,7 +343,7 @@ function saveProd(id){const n=$('#fn').value.trim(),pr=+$('#fp').value,st=+$('#f
 /* Factura en PDF */
 async function invoice(id){const o=db.orders.find(x=>x.id==id),u=db.users.find(x=>x.id==o.userId)||{name:'—',email:'—'};
  const J=window.jspdf&&window.jspdf.jsPDF;if(!J)return toast('No se pudo cargar el generador de PDF');
- let d=null;try{d=await claude.use('downloads')}catch(e){}
+ let d=true;
  if(!d)return toast('La descarga no está disponible en esta vista');
  const doc=new J();let y=20;
  doc.setFontSize(20);doc.text('7tono',14,y);doc.setFontSize(10);doc.text('Instrumentos y equipos de sonido',14,y+6);
@@ -300,7 +354,7 @@ async function invoice(id){const o=db.orders.find(x=>x.id==id),u=db.users.find(x
  o.items.forEach(i=>{if(y>265){doc.addPage();y=20}y+=8;doc.text(doc.splitTextToSize(i.name,95)[0],14,y);doc.text(String(i.q),120,y);doc.text(fmt(i.price),160,y,{align:'right'});doc.text(fmt(i.price*i.q),196,y,{align:'right'})});
  y+=6;doc.line(14,y,196,y);doc.setFontSize(10);if(o.sub!=null){[['Subtotal',fmt(o.sub)],o.disc?['Descuento','-'+fmt(o.disc)]:null,['Envío',o.ship?fmt(o.ship):'Gratis'],['IVA incluido',fmt(o.iva)]].filter(Boolean).forEach(([a,b])=>{y+=6;doc.text(a,150,y);doc.text(b,196,y,{align:'right'})});y+=2}doc.setFontSize(13);doc.setFont(undefined,'bold');doc.text('Total: '+fmt(o.total),196,y+9,{align:'right'});
  doc.setFont(undefined,'normal');doc.setFontSize(8);doc.text('Documento de demostración, sin validez fiscal.',14,285);
- try{await d.save({filename:'factura-'+String(o.id).padStart(5,'0')+'.pdf',data:doc.output('blob')})}catch(e){if(!e||e.code!=='declined')toast('No se pudo guardar la factura')}}
+ try{doc.save('factura-'+String(o.id).padStart(5,'0')+'.pdf')}catch(e){if(!e||e.code!=='declined')toast('No se pudo guardar la factura')}}
 
 /* Quiénes somos */
 function about(){return `<section class="hero" style="grid-template-columns:1fr"><div><h1>Somos músicos atendiendo a músicos.</h1><p>7tono reúne instrumentos y equipos de sonido para que estudiar, grabar y tocar en vivo sea más fácil: catálogo claro, asesoría honesta y compra segura.</p></div></section>
@@ -340,7 +394,7 @@ function adminQuejas(){const l=db.complaints.slice().reverse();return `<div clas
 function setQ(id,s){db.complaints.find(c=>c.id==id).status=s;save();toast('Estado actualizado')}
 
 /* Configuración de la tienda: completa estos datos */
-const STORE={wa:'',tel:'',mail:'',addr:'',hours:'',payUrl:''}; // wa: número con indicativo y sin signos, ej. 573001234567
+const STORE={wa:'573209392025',tel:'3209392025',mail:'contacto@7tono.com',addr:'Autopista Medellín calle 80, Km 7 vía Bogotá',hours:'Lunes a sábado de 9:00 a. m. a 7:00 p. m.',payUrl:'https://checkout.wompi.co/l/demo-7tono'}; // wa: número con indicativo y sin signos, ej. 573001234567
 Object.assign(STORE,db.store||{});
 const waUrl=m=>'https://wa.me/'+STORE.wa+'?text='+encodeURIComponent(m);
 function waA(label,msg,cls){cls=cls||'btn wa';return STORE.wa?`<a class="${cls}" href="${waUrl(msg)}" target="_blank" rel="noopener">${label}</a>`:`<a class="${cls}" href="#" onclick="event.preventDefault();toast('Falta configurar el número de WhatsApp de la tienda')">${label}</a>`}
@@ -381,10 +435,7 @@ function contacto(){const map=STORE.addr?`<a class="btn alt" href="https://www.g
 fab();
 
 /* ---------- Alquiler de equipos ---------- */
-function seedRental(){const t=today();return{gear:[{id:1,name:'Parlante PA activo 15"',price:120000},{id:2,name:'Subwoofer activo 18"',price:180000},{id:3,name:'Consola digital de 16 canales',price:250000},{id:4,name:'Micrófono inalámbrico de mano',price:60000},{id:5,name:'Micrófono con cable',price:20000},{id:6,name:'Monitor de piso',price:70000},{id:7,name:'Kit de cables y soportes',price:40000},{id:8,name:'Set de luces LED (4 pares)',price:90000},{id:9,name:'Line array (par)',price:600000}],
-packages:[{id:11,name:'Íntimo',scale:'Pequeño',desc:'Reuniones, cumpleaños y conferencias.',price:0,items:[{eid:1,q:2},{eid:4,q:1},{eid:5,q:1},{eid:7,q:1}]},{id:12,name:'Fiesta',scale:'Mediano',desc:'Bodas, grados y fiestas con baile.',price:0,items:[{eid:1,q:2},{eid:2,q:2},{eid:3,q:1},{eid:4,q:2},{eid:6,q:2},{eid:7,q:1},{eid:8,q:1}]},{id:13,name:'Concierto',scale:'Grande',desc:'Conciertos y festivales al aire libre.',price:2200000,items:[{eid:9,q:1},{eid:2,q:4},{eid:3,q:1},{eid:4,q:4},{eid:6,q:4},{eid:7,q:2},{eid:8,q:2}]}],
-scales:{'Pequeño':{label:'Pequeño · hasta 100 personas',tech:150000},'Mediano':{label:'Mediano · 100 a 500 personas',tech:350000},'Grande':{label:'Grande · más de 500 personas',tech:800000}},
-reservations:[{id:db.nextId++,event:'Evento de ejemplo',name:'Ejemplo',email:'',phone:'',start:addD(t,6),end:addD(t,7),status:'Confirmada',total:0,block:true}]}}
+
 function ymd(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function today(){return ymd(new Date())}
 function addD(s,n){const d=new Date(s+'T00:00:00');d.setDate(d.getDate()+n);return ymd(d)}
@@ -479,7 +530,7 @@ function rentPdf(id){rentDoc(recFrom(db.rental.reservations.find(x=>x.id==id)))}
 function quotePdf(){const q=quote();if(!q.days||!rItems().length)return toast('Elige un paquete y las fechas para generar la cotización');
  rentDoc({title:'Cotización',code:'COT-'+today().replace(/-/g,''),date:today(),name:R.name||'—',email:R.email||'—',phone:R.phone||'—',event:R.event||'—',scale:db.rental.scales[R.scale].label.split(' · ')[0],pkg:pkgName(),items:rItems().map(i=>({name:gear(i.eid).name,q:i.q,price:gear(i.eid).price})),start:R.start,end:R.end,days:q.days,pd:q.pd,eq:q.eq,disc:q.disc,tech:q.tech,transport:q.transport,city:curCity().name,total:q.total,deposit:q.deposit,paid:false,inv:false})}
 async function rentDoc(d){const J=window.jspdf&&window.jspdf.jsPDF;if(!J)return toast('No se pudo cargar el generador de PDF');
- let dl=null;try{dl=await claude.use('downloads')}catch(e){}
+ let dl=true;
  if(!dl)return toast('La descarga no está disponible en esta vista');
  const doc=new J();let y=20;
  doc.setFontSize(20);doc.text('7tono',14,y);doc.setFontSize(10);doc.text('Alquiler de equipos de sonido',14,y+6);doc.setFontSize(16);doc.text(d.title+' '+d.code,196,y,{align:'right'});
@@ -492,7 +543,7 @@ async function rentDoc(d){const J=window.jspdf&&window.jspdf.jsPDF;if(!J)return 
  if(d.eq!=null){row('Equipos por día',fmt(d.pd));row('Subtotal ('+d.days+' d)',fmt(d.eq));if(d.disc)row('Descuento','-'+fmt(d.disc));row('Técnico y montaje',fmt(d.tech));if(d.transport)row('Transporte',fmt(d.transport))}
  row('TOTAL',fmt(d.total),true);row(d.inv&&d.paid?'Anticipo recibido':'Anticipo para apartar',fmt(d.deposit));row(d.inv&&d.paid?'Saldo pendiente':'Saldo restante',fmt(d.total-d.deposit),true);
  doc.setFont(undefined,'normal');doc.setFontSize(8);doc.text(d.inv?'Documento de demostración, sin validez fiscal.':'Valor estimado, sujeto a disponibilidad de fechas y a confirmación.',14,285);
- try{await dl.save({filename:(d.inv?'factura-alquiler-':'cotizacion-')+d.code+'.pdf',data:doc.output('blob')})}catch(e){if(!e||e.code!=='declined')toast('No se pudo guardar el PDF')}}
+ try{doc.save((d.inv?'factura-alquiler-':'cotizacion-')+d.code+'.pdf')}catch(e){if(!e||e.code!=='declined')toast('No se pudo guardar el PDF')}}
 
 /* Desglose de reservas anteriores */
 function backfillRes(){const rs=db.rental;rs.reservations.forEach(r=>{if(r.block||r.pd!=null||!r.total||!r.start)return;const days=r.days||nd(r.start,r.end),tech=((rs.scales[r.scale]||{}).tech||0)*days,base=Math.max(0,r.total-tech),eq=days>=3?Math.round(base/0.9):base;Object.assign(r,{days,tech,eq,disc:eq-base,pd:Math.round(eq/days),transport:0,city:'No registrado',deposit:r.deposit!=null?r.deposit:Math.round(r.total*rs.depositPct/100),depositPaid:!!r.depositPaid})})}
@@ -561,12 +612,12 @@ async function csv(w){let rows;
  if(w=='pedidos')rows=[['Pedido','Fecha','Cliente','Total','Pago','Estado']].concat(db.orders.map(o=>{const u=db.users.find(x=>x.id==o.userId)||{};return[o.id,o.date,u.name,o.total,PAYS[o.method].split(' (')[0],o.status]}));
  else if(w=='clientes')rows=[['Nombre','Correo','Pedidos','Total comprado']].concat(db.users.filter(u=>u.role=='cliente').map(u=>{const os=db.orders.filter(o=>o.userId==u.id);return[u.name,u.email,os.length,os.reduce((a,o)=>a+o.total,0)]}));
  else rows=[['Código','Evento','Cliente','Inicio','Fin','Total','Estado']].concat(db.rental.reservations.filter(r=>!r.block).map(r=>[rcode(r.id),r.event,r.name,r.start,r.end,r.total,r.status]));
- let d=null;try{d=await claude.use('downloads')}catch(e){}if(!d)return toast('La descarga no está disponible en esta vista');
+ let d=true;if(!d)return toast('La descarga no está disponible en esta vista');
  const t='\ufeff'+rows.map(r=>r.map(v=>{let s=String(v==null?'':v);if(/^[=+@-]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"'}).join(',')).join('\n');
- try{await d.save({filename:w+'.csv',data:new Blob([t],{type:'text/csv'})})}catch(e){if(!e||e.code!=='declined')toast('No se pudo guardar el archivo')}}
+ try{dlBlob(w+'.csv',new Blob([t],{type:'text/csv;charset=utf-8'}))}catch(e){if(!e||e.code!=='declined')toast('No se pudo guardar el archivo')}}
 
 /* Contrato de alquiler en PDF */
-async function pdfStart(){const J=window.jspdf&&window.jspdf.jsPDF;if(!J){toast('No se pudo cargar el generador de PDF');return null}let dl=null;try{dl=await claude.use('downloads')}catch(e){}if(!dl){toast('La descarga no está disponible en esta vista');return null}return{J,dl}}
+async function pdfStart(){const J=window.jspdf&&window.jspdf.jsPDF;if(!J){toast('No se pudo cargar el generador de PDF');return null}let dl=true;if(!dl){toast('La descarga no está disponible en esta vista');return null}return{J,dl}}
 async function contractPdf(id){const r=db.rental.reservations.find(x=>x.id==id),p=await pdfStart();if(!p)return;const doc=new p.J(),dep=r.deposit!=null?r.deposit:Math.round(r.total*db.rental.depositPct/100);let y=20;
  const H=t=>{if(y>270){doc.addPage();y=20}doc.setFont(undefined,'bold');doc.setFontSize(11);doc.text(t,14,y);y+=6;doc.setFont(undefined,'normal');doc.setFontSize(10)};
  const P=t=>{doc.splitTextToSize(t,182).forEach(l=>{if(y>280){doc.addPage();y=20}doc.text(l,14,y);y+=5});y+=3};
@@ -582,12 +633,12 @@ async function contractPdf(id){const r=db.rental.reservations.find(x=>x.id==id),
  H('9. Ley aplicable');P('Este contrato se rige por las leyes de la República de Colombia.');
  y+=14;if(y>260){doc.addPage();y=30}doc.line(14,y,90,y);doc.line(114,y,190,y);doc.text('Arrendador',14,y+5);doc.text('Arrendatario: '+r.name,114,y+5);
  doc.setFontSize(8);doc.text('Plantilla de demostración: debe ser revisada por un abogado antes de usarla.',14,288);
- try{await p.dl.save({filename:'contrato-'+rcode(r.id)+'.pdf',data:doc.output('blob')})}catch(e){if(!e||e.code!=='declined')toast('No se pudo guardar el contrato')}}
+ try{doc.save('contrato-'+rcode(r.id)+'.pdf')}catch(e){if(!e||e.code!=='declined')toast('No se pudo guardar el contrato')}}
 
 /* Aviso de cookies */
-function ckOk(){try{localStorage.setItem('res-ck','1')}catch(e){}const k=$('#ck');if(k)k.remove()}
+function ckOk(){try{document.cookie='res-ck=1; max-age=31536000; path=/; SameSite=Lax'}catch(e){}const k=$('#ck');if(k)k.remove()}
 function ckGo(ev){ev.preventDefault();ckOk();go('privacy')}
-try{if(!localStorage.getItem('res-ck'))document.body.insertAdjacentHTML('beforeend','<div id="ck" class="panel" style="position:fixed;left:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:25;margin:0;max-width:520px"><p style="margin:0 0 8px">Este sitio guarda tu sesión y tu carrito en tu navegador. <a href="#" onclick="ckGo(event)">Más información</a></p><button class="btn sm" onclick="ckOk()">Entendido</button></div>')}catch(e){}
+try{if(!ckGet())document.body.insertAdjacentHTML('beforeend','<div id="ck" class="panel" style="position:fixed;left:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:25;margin:0;max-width:520px"><p style="margin:0 0 8px">Este sitio guarda tu sesión y tu carrito en tu navegador. <a href="#" onclick="ckGo(event)">Más información</a></p><button class="btn sm" onclick="ckOk()">Entendido</button></div>')}catch(e){}
 
 /* Inicio de sesión: verificación tras 3 fallos y pausa tras 5 */
 let LG={fails:0,until:0,a:0,b:0};
@@ -596,7 +647,7 @@ function lgChallenge(){LG.a=1+Math.floor(Math.random()*9);LG.b=1+Math.floor(Math
 /* Pasarela de pagos por enlace: STORE.payUrl debe ser un enlace https de tu pasarela */
 function gwOn(){return /^https:[/][/]/.test(STORE.payUrl)}
 function payA(ref){return gwOn()?`<div style="margin:10px 0"><a class="btn" href="${esc(STORE.payUrl)}" target="_blank" rel="noopener">Ir a la pasarela de pago</a><p><small>Usa esta referencia: <b>${esc(ref)}</b></small></p></div>`:'<p class="bad">La pasarela aún no está configurada.</p>'}
-render();
+boot();
 </script>
 </body>
 </html>
