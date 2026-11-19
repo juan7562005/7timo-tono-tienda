@@ -86,14 +86,13 @@ a.btn{display:inline-block;text-decoration:none;text-align:center}.btn.wa{backgr
 const $=s=>document.querySelector(s);
 const fmt=n=>new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(n);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const CATS=['Guitarras','Teclados','Audio','Micrófonos','Parlantes'];
 const ICON={Guitarras:'🎸',Teclados:'🎹',Audio:'🎧',Micrófonos:'🎤',Parlantes:'🔊'};
 const PAYS={card:'Tarjeta de crédito o débito',pse:'PSE (transferencia bancaria)',nequi:'Nequi o Daviplata',cod:'Pago contra entrega',gw:'Pasarela de pagos (enlace seguro)'};
 const STATES=['Pendiente','Pagado','Enviado','Entregado','Cancelado'];
 const SUPA_URL='https://pgjulrvajklfcsqmlxyd.supabase.co';
 const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBnanVscnZhamtsZmNzcW1seHlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ3OTM2MzYsImV4cCI6MjExMDM2OTYzNn0.99VMWmAf_5ui3CoxRZSQgBdbF3S0OMQzaMcLy08NCfs';
 const sb=supabase.createClient(SUPA_URL,SUPA_KEY);
-const emptyDb=()=>({users:[],products:[],orders:[],complaints:[],store:{},shop:{iva:19,ship:15000,freeFrom:500000,coupons:[]},rental:{gear:[],packages:[],reservations:[],scales:{},cities:[],depositPct:30,guaPct:20}});
+const emptyDb=()=>({categories:['Guitarras','Teclados','Audio','Micrófonos','Parlantes'],users:[],products:[],orders:[],complaints:[],store:{},shop:{iva:19,ship:15000,freeFrom:500000,coupons:[]},rental:{gear:[],packages:[],reservations:[],scales:{},cities:[],depositPct:30,guaPct:20}});
 let db=emptyDb();
 /* ---- Mapeo objeto JS <-> tabla: [clave, columna, valorPorDefecto, esFecha] ---- */
 const T=[
@@ -107,6 +106,7 @@ const T=[
 ];
 const CFG=[
 ['store',d=>d.store,(d,v)=>{d.store=v}],
+['categorias',d=>d.categories,(d,v)=>{d.categories=Array.isArray(v)&&v.length?v:['General']}],
 ['shop',d=>d.shop,(d,v)=>{d.shop=v}],
 ['rental_scales',d=>d.rental.scales,(d,v)=>{d.rental.scales=v}],
 ['rental_cities',d=>d.rental.cities,(d,v)=>{d.rental.cities=v}],
@@ -194,7 +194,7 @@ function shop(){
  <p>Guitarras, teclados, micrófonos y equipos de estudio con envío a todo el país y pago seguro.</p></div>
  <div class="eq" aria-hidden="true">${Array.from({length:18},(_,i)=>`<i style="animation-delay:-${(i*0.37%1.2).toFixed(2)}s;animation-duration:${(0.8+(i*0.13)%0.9).toFixed(2)}s"></i>`).join('')}</div></section>
  <div class="bar"><input id="q" type="search" placeholder="Buscar un instrumento o equipo" value="${esc(S.q)}" oninput="S.q=this.value;list()" aria-label="Buscar"><select onchange="S.sort=this.value;list()" aria-label="Ordenar" style="width:auto"><option value="">Ordenar</option><option value="asc" ${S.sort=='asc'?'selected':''}>Precio: menor a mayor</option><option value="desc" ${S.sort=='desc'?'selected':''}>Precio: mayor a menor</option></select>
- ${['Todos',...CATS].map(c=>`<button class="chip ${S.cat==c?'on':''}" onclick="S.cat='${c}';render()">${c}</button>`).join('')}</div>
+ ${['Todos',...db.categories].map((c,i)=>`<button class="chip ${S.cat==c?'on':''}" onclick="S.cat=${i?'db.categories['+(i-1)+']':'\'Todos\''};render()">${esc(c)}</button>`).join('')}</div>
  <div class="grid" id="grid">${cards(list)}</div>`;
 }
 function cards(l){return l.length?l.map(p=>`<article class="card"><button class="tilebtn" onclick="detail(${p.id})" aria-label="Ver detalle de ${esc(p.name)}"><div class="tile">${p.img?`<img src="${p.img}" alt="" loading="lazy">`:ICON[p.cat]}</div></button>
@@ -292,7 +292,7 @@ function adminTab(){
  }
  if(S.tab=='productos')return `<div class="panel"><h3 style="margin-bottom:10px">Agregar producto</h3><div class="row">
   <input id="pn" placeholder="Nombre" style="flex:2;min-width:160px;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--surface)">
-  <select id="pc" style="padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--surface)">${CATS.map(c=>`<option>${c}</option>`).join('')}</select>
+  <select id="pc" style="padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--surface)">${db.categories.map(c=>`<option>${esc(c)}</option>`).join('')}</select>
   <input id="pp" type="number" min="0" placeholder="Precio COP" style="padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);width:140px">
   <input id="ps" type="number" min="0" placeholder="Stock" style="padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);width:90px">
   <button class="btn" onclick="addProd()">Agregar producto</button></div></div>
@@ -324,9 +324,9 @@ document.addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.target.id==='le'|
 /* Productos: formulario con imagen, descripción y etiquetas */
 let draftImg='';
 function adminProds(){return `<div class="panel"><button class="btn" onclick="prodForm(0)">Nuevo producto</button></div><div class="panel tbl"><table><tr><th></th><th>Producto</th><th>Etiquetas</th><th>Precio</th><th>Stock</th><th></th></tr>${db.products.map(p=>`<tr><td><div class="tile" style="width:56px;height:44px;font-size:22px;border-radius:6px">${p.img?`<img src="${p.img}" alt="">`:ICON[p.cat]}</div></td><td>${esc(p.name)}</td><td>${esc((p.tags||[]).join(', '))}</td><td>${fmt(p.price)}</td><td>${p.stock}</td><td><button class="btn alt sm" onclick="prodForm(${p.id})">Editar</button> <button class="btn alt sm" onclick="delProd(${p.id})">Eliminar</button></td></tr>`).join('')}</table></div>`}
-function prodForm(id){const p=id?db.products.find(x=>x.id==id):{name:'',cat:CATS[0],price:'',stock:'',desc:'',tags:[],img:''};draftImg=p.img||'';
+function prodForm(id){const p=id?db.products.find(x=>x.id==id):{name:'',cat:db.categories[0],price:'',stock:'',desc:'',tags:[],img:''};draftImg=p.img||'';
 openModal(`<h2>${id?'Editar':'Nuevo'} producto</h2><div class="f" style="margin-top:12px"><label>Nombre<input id="fn" value="${esc(p.name)}"></label>
-<label>Categoría<select id="fc">${CATS.map(c=>`<option ${c==p.cat?'selected':''}>${c}</option>`).join('')}</select></label>
+<label>Categoría<select id="fc">${[...new Set([...db.categories,p.cat])].filter(Boolean).map(c=>`<option ${c==p.cat?'selected':''}>${esc(c)}</option>`).join('')}</select></label>
 <div class="row"><label style="flex:1">Precio (COP)<input id="fp" type="number" min="0" value="${p.price}"></label><label style="flex:1">Stock<input id="fs" type="number" min="0" value="${p.stock}"></label></div>
 <label>Descripción<textarea id="fd" rows="3">${esc(p.desc)}</textarea></label>
 <label>Etiquetas (separadas por coma)<input id="ft" value="${esc((p.tags||[]).join(', '))}" placeholder="acústica, principiante"></label>
@@ -590,9 +590,14 @@ function setUnits(id,v){gear(id).units=Math.max(1,Math.floor(+v||1));save();toas
 function setGua(id,v){db.rental.reservations.find(r=>r.id==id).guaReturned=v;save();toast(v?'Garantía marcada como devuelta':'Garantía desmarcada')}
 
 /* Ajustes de administración */
-function adminSet(){const sh=db.shop,rs=db.rental,st=STORE;return `<div class="panel"><h3>Datos de contacto y WhatsApp</h3><div class="f" style="max-width:none">${[['wa','WhatsApp (con indicativo, solo números)','tel'],['tel','Teléfono','tel'],['mail','Correo de contacto','email'],['addr','Dirección y ciudad','text'],['hours','Horario de atención','text'],['payUrl','Enlace de la pasarela de pago (https)','url']].map(([k,l,t])=>`<label>${l}<input type="${t}" value="${esc(st[k]||'')}" onchange="setStore('${k}',this.value)"></label>`).join('')}</div><p style="margin:10px 0 0">${waA('Probar mi WhatsApp','Hola, esto es una prueba desde 7tono.')}</p></div><div class="panel"><h3>Tienda: IVA y envío</h3><div class="f" style="max-width:none"><label>IVA incluido en los precios (%)<input type="number" min="0" value="${sh.iva}" onchange="setSh('iva',this.value)"></label><label>Valor del envío (COP)<input type="number" min="0" value="${sh.ship}" onchange="setSh('ship',this.value)"></label><label>Envío gratis desde (COP, 0 = nunca)<input type="number" min="0" value="${sh.freeFrom}" onchange="setSh('freeFrom',this.value)"></label></div></div>
+function adminSet(){const sh=db.shop,rs=db.rental,st=STORE;return `${catPanel()}<div class="panel"><h3>Datos de contacto y WhatsApp</h3><div class="f" style="max-width:none">${[['wa','WhatsApp (con indicativo, solo números)','tel'],['tel','Teléfono','tel'],['mail','Correo de contacto','email'],['addr','Dirección y ciudad','text'],['hours','Horario de atención','text'],['payUrl','Enlace de la pasarela de pago (https)','url']].map(([k,l,t])=>`<label>${l}<input type="${t}" value="${esc(st[k]||'')}" onchange="setStore('${k}',this.value)"></label>`).join('')}</div><p style="margin:10px 0 0">${waA('Probar mi WhatsApp','Hola, esto es una prueba desde 7tono.')}</p></div><div class="panel"><h3>Tienda: IVA y envío</h3><div class="f" style="max-width:none"><label>IVA incluido en los precios (%)<input type="number" min="0" value="${sh.iva}" onchange="setSh('iva',this.value)"></label><label>Valor del envío (COP)<input type="number" min="0" value="${sh.ship}" onchange="setSh('ship',this.value)"></label><label>Envío gratis desde (COP, 0 = nunca)<input type="number" min="0" value="${sh.freeFrom}" onchange="setSh('freeFrom',this.value)"></label></div></div>
 <div class="panel tbl"><h3>Cupones</h3><table style="min-width:0"><tr><th>Código</th><th>Descuento</th><th>Activo</th><th></th></tr>${sh.coupons.map((c,i)=>`<tr><td>${esc(c.code)}</td><td>${c.pct}%</td><td><input type="checkbox" style="width:auto" ${c.active?'checked':''} onchange="togCoupon(${i},this.checked)" aria-label="Activo"></td><td><button class="btn alt sm" onclick="delCoupon(${i})">Eliminar</button></td></tr>`).join('')}</table><div class="row" style="margin-top:10px"><input class="in" id="kc" placeholder="CÓDIGO" style="width:150px"><input class="in" id="kp" type="number" min="1" max="100" placeholder="% desc." style="width:110px"><button class="btn" onclick="addCoupon()">Agregar cupón</button></div></div>
 <div class="panel"><h3>Alquiler</h3><div class="f" style="max-width:none"><label>Disponibilidad<select onchange="db.rental.mode=this.value;save();toast('Guardado')"><option value="dia" ${rs.mode!='inventario'?'selected':''}>Un evento por día (bloquea el día completo)</option><option value="inventario" ${rs.mode=='inventario'?'selected':''}>Por inventario (según las unidades de cada equipo)</option></select></label><label>Depósito de garantía (% del subtotal de equipos)<input type="number" min="0" max="100" value="${rs.guaPct}" onchange="db.rental.guaPct=Math.min(100,Math.max(0,+this.value||0));save();toast('Guardado')"></label></div></div>`}
+function catPanel(){return `<div class="panel"><h3>Categorías de productos</h3><p style="margin:0 0 10px">Agrega las categorías que necesites. Aparecen en los filtros de la tienda y en el formulario de productos.</p><div style="display:grid;gap:8px;max-width:520px">${db.categories.map((c,i)=>`<div class="row" style="align-items:center;gap:8px"><input value="${esc(c)}" maxlength="30" onchange="renCat(${i},this.value)" style="flex:1"><small>${db.products.filter(p=>p.cat==c).length} prod.</small><button class="btn alt sm" onclick="delCat(${i})">Borrar</button></div>`).join('')}<div class="row" style="align-items:center;gap:8px"><input id="nc" maxlength="30" placeholder="Nueva categoría (ej. Percusión)" style="flex:1" onkeydown="if(event.key==='Enter')addCat()"><button class="btn sm" onclick="addCat()">Agregar</button></div></div></div>`}
+function cleanCat(v){return String(v||'').trim().replace(/\s+/g,' ')}
+function addCat(){const n=cleanCat($('#nc').value);if(!n)return toast('Escribe el nombre de la categoría');if(db.categories.some(c=>c.toLowerCase()==n.toLowerCase()))return toast('Esa categoría ya existe');db.categories.push(n);save();toast('Categoría agregada');render()}
+function delCat(i){const c=db.categories[i],n=db.products.filter(p=>p.cat==c).length;if(n)return toast('No se puede borrar «'+c+'»: tiene '+n+' producto(s). Muévelos a otra categoría primero.');if(db.categories.length<2)return toast('Debe quedar al menos una categoría');db.categories.splice(i,1);if(S.cat==c)S.cat='Todos';save();render()}
+function renCat(i,v){v=cleanCat(v);const old=db.categories[i];if(!v||v==old)return render();if(db.categories.some((c,j)=>j!=i&&c.toLowerCase()==v.toLowerCase())){toast('Esa categoría ya existe');return render()}db.products.forEach(p=>{if(p.cat==old)p.cat=v});db.categories[i]=v;if(S.cat==old)S.cat=v;save();toast('Guardado');render()}
 function setSh(k,v){db.shop[k]=Math.max(0,+v||0);save();toast('Guardado')}
 function togCoupon(i,v){db.shop.coupons[i].active=v;save();toast('Guardado')}
 function delCoupon(i){db.shop.coupons.splice(i,1);save();render()}
